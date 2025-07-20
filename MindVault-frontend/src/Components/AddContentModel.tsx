@@ -1,0 +1,141 @@
+import React from 'react';
+import { X, FileText, Video, Link, Upload, Hash } from 'lucide-react';
+import Button from './Button';
+
+interface AddContentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const AddContentModal: React.FC<AddContentModalProps> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  const contentTypes = [
+    {
+      id: 'text',
+      title: 'Text Note',
+      description: 'Create a simple text note',
+      icon: FileText,
+      color: 'bg-blue-50 text-blue-600 border-blue-200'
+    },
+    {
+      id: 'video',
+      title: 'Video',
+      description: 'Add a video link or upload',
+      icon: Video,
+      color: 'bg-purple-50 text-purple-600 border-purple-200'
+    },
+    {
+      id: 'link',
+      title: 'Web Link',
+      description: 'Save a webpage or article',
+      icon: Link,
+      color: 'bg-green-50 text-green-600 border-green-200'
+    },
+    {
+      id: 'document',
+      title: 'Document',
+      description: 'Upload a file or document',
+      icon: Upload,
+      color: 'bg-orange-50 text-orange-600 border-orange-200'
+    }
+  ];
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-hidden">
+
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900">Add Content</h2>
+          <button
+            onClick={onClose}
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-6">
+          <p className="text-gray-600 mb-6">Choose the type of content you want to add to your MindVault</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            {contentTypes.map((type) => {
+              const Icon = type.icon;
+              return (
+                <button
+                  key={type.id}
+                  className="p-4 border-2 border-gray-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200 text-left group"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`p-3 rounded-lg border ${type.color} group-hover:scale-105 transition-transform`}>
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-medium text-gray-900 mb-1">{type.title}</h3>
+                      <p className="text-sm text-gray-600">{type.description}</p>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="border-t border-gray-200 pt-6">
+            <h3 className="font-medium text-gray-900 mb-4">Quick Add</h3>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  placeholder="Enter a title for your content..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+                  Content or URL
+                </label>
+                <textarea
+                  id="content"
+                  rows={4}
+                  placeholder="Paste a URL, write some text, or describe your content..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors resize-none"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+                  Tags
+                </label>
+                <div className="flex items-center gap-2">
+                  <Hash className="w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    id="tags"
+                    placeholder="productivity, learning, ideas..."
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant="primary">
+            Add Content
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AddContentModal;
