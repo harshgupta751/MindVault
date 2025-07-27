@@ -19,11 +19,15 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const middleware_1 = require("./middleware");
+const open_graph_scraper_1 = __importDefault(require("open-graph-scraper"));
 const nanoid_1 = require("nanoid");
 const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: ['http://localhost:5173'],
+    credentials: true
+}));
 app.use(express_1.default.json());
 app.post('/signup', function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -34,21 +38,23 @@ app.post('/signup', function (req, res) {
             });
             return;
         }
-        const username = req.body.username;
+        const email = req.body.email;
         const findUser = yield db_1.UserModel.findOne({
-            username
+            email
         });
         if (findUser) {
             res.json({
-                message: "Username already exits!"
+                message: "User already exists!"
             });
             return;
         }
+        const name = req.body.name;
         const password = req.body.password;
         const hashedPassword = yield bcrypt_1.default.hash(password, 5);
         try {
             yield db_1.UserModel.create({
-                username,
+                email,
+                name,
                 password: hashedPassword
             });
             res.json({
@@ -71,21 +77,21 @@ app.post('/signin', function (req, res) {
             });
             return;
         }
-        const username = req.body.username;
+        const email = req.body.email;
         const password = req.body.password;
         try {
             const findUser = yield db_1.UserModel.findOne({
-                username: username
+                email
             });
             if (!findUser) {
-                res.status(403).json({
+                res.json({
                     message: "User does not exist!"
                 });
                 return;
             }
             const check = yield bcrypt_1.default.compare(password, findUser.password);
             if (!check) {
-                res.status(403).json({
+                res.json({
                     message: "Wrong Password!"
                 });
                 return;
@@ -106,14 +112,16 @@ app.post('/signin', function (req, res) {
 });
 app.post('/create', middleware_1.auth, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const link = req.body.link;
+        const content = req.body.content;
         const type = req.body.type;
         const title = req.body.title;
+        const subtitle = req.body.subtitle;
         const tags = req.body.tags;
         const response = validators_1.createSchema.safeParse({
-            link,
+            content,
             type,
-            title
+            title,
+            subtitle
         });
         if (!response.success) {
             res.status(411).json({
@@ -123,12 +131,13 @@ app.post('/create', middleware_1.auth, function (req, res) {
         }
         try {
             yield db_1.ContentModel.create({
-                link,
+                content,
                 type,
                 title,
+                subtitle,
                 tags,
                 //@ts-ignore
-                userId: req.id
+                userId: new db_1.ObjectId(req.id)
             });
             res.json({
                 message: "Content Added!"
@@ -146,7 +155,7 @@ app.get('/allcontent', middleware_1.auth, function (req, res) {
         try {
             const allContent = yield db_1.ContentModel.find({
                 //@ts-ignore
-                userId: req.id
+                userId: new db_1.ObjectId(req.id)
             });
             res.json({
                 allContent: allContent
@@ -159,14 +168,14 @@ app.get('/allcontent', middleware_1.auth, function (req, res) {
         }
     });
 });
-app.delete('/delete', middleware_1.auth, function (req, res) {
+app.delete('/delete/:id', middleware_1.auth, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const contentId = req.body.contentId;
+        const contentId = req.params.id;
         try {
             yield db_1.ContentModel.deleteOne({
                 _id: contentId,
                 //@ts-ignore
-                userId: req.id
+                userId: new db_1.ObjectId(req.id)
             });
             res.json({
                 message: "Content deleted."
@@ -179,23 +188,23 @@ app.delete('/delete', middleware_1.auth, function (req, res) {
         }
     });
 });
-app.post('/share', middleware_1.auth, function (req, res) {
+app.get('/share/settings/:shareOn', middleware_1.auth, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const shareOn = req.body.shareOn;
+        const shareOn = Boolean(req.params.shareOn);
         try {
             if (!shareOn) {
                 yield db_1.LinkModel.deleteOne({
                     //@ts-ignore
-                    userId: req.id
+                    userId: new db_1.ObjectId(req.id)
                 });
                 res.json({
                     message: "Share is disabled"
                 });
                 return;
             }
-            const existingSharableId = db_1.LinkModel.findOne({
+            const existingSharableId = yield db_1.LinkModel.findOne({
                 //@ts-ignore
-                userId: req.id
+                userId: new db_1.ObjectId(req.id)
             });
             if (existingSharableId) {
                 res.json({
@@ -208,7 +217,7 @@ app.post('/share', middleware_1.auth, function (req, res) {
             yield db_1.LinkModel.create({
                 hash: sharableId,
                 //@ts-ignore
-                userId: req.id
+                userId: new db_1.ObjectId(req.id)
             });
             res.json({
                 sharableId: `/share/${sharableId}`
@@ -221,31 +230,57 @@ app.post('/share', middleware_1.auth, function (req, res) {
         }
     });
 });
-app.get('/share/:id', function (req, res) {
-    const sharableId = req.params.id;
-    try {
-        const response = db_1.LinkModel.findOne({
-            hash: sharableId
-        });
-        if (!response) {
-            res.status(404).json({
-                message: "This link is not valid"
+app.get('/share/content/:id', function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const sharableId = req.params.id;
+        try {
+            const response = yield db_1.LinkModel.findOne({
+                hash: sharableId
             });
-            return;
+            if (!response) {
+                res.status(404).json({
+                    message: "This link is not valid"
+                });
+                return;
+            }
+            //@ts-ignore
+            const userId = response.userId;
+            const allContent = yield db_1.ContentModel.find({
+                userId
+            });
+            res.json({
+                allContent
+            });
         }
-        //@ts-ignore
-        const userId = response.userId;
-        const allContent = db_1.ContentModel.find({
-            userId
-        });
-        res.json({
-            allContent
-        });
-    }
-    catch (e) {
-        res.status(403).json({
-            error: "Error occured. Please try again!"
-        });
-    }
+        catch (e) {
+            res.status(403).json({
+                error: "Error occured. Please try again!"
+            });
+        }
+    });
 });
-app.listen(3000);
+app.post('/api/og', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { url } = req.body;
+    if (!url)
+        return res.status(400).json({ error: 'URL is required' });
+    try {
+        const { result } = yield (0, open_graph_scraper_1.default)({ url });
+        if (result.success) {
+            return res.json({
+                title: result.ogTitle || '',
+                description: result.ogDescription || '',
+                //@ts-ignore
+                image: ((_a = result.ogImage) === null || _a === void 0 ? void 0 : _a.url) || '',
+                url: result.ogUrl || url,
+            });
+        }
+        else {
+            return res.status(404).json({ error: 'No OG metadata found' });
+        }
+    }
+    catch (err) {
+        return res.status(500).json({ error: 'Something went wrong' });
+    }
+}));
+app.listen(3000, () => console.log("Server is running"));

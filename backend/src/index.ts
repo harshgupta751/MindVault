@@ -1,17 +1,22 @@
 import express, { response } from 'express'
 import { success } from 'zod'
 import {createSchema, signInSchema, signUpSchema} from './validators' 
-import { ContentModel, LinkModel, UserModel } from './db'
+import { ContentModel, LinkModel, UserModel,ObjectId } from './db'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import { auth } from './middleware'
+import ogs from 'open-graph-scraper'
 import {nanoid} from 'nanoid'
 import cors from 'cors'
+
 dotenv.config()
 
 const app= express()
-app.use(cors())
+app.use(cors({
+    origin: ['http://localhost:5173'] ,
+    credentials: true
+}))
 
 app.use(express.json())
 
@@ -23,27 +28,30 @@ if(!response.success){
     })
     return
 }
-const username= req.body.username
+const email= req.body.email
 const findUser=await UserModel.findOne({
-    username
+    email
 })
 if(findUser){
 res.json({
-    message: "Username already exits!"
+    message: "User already exists!"
 })
 return
 }
+const name= req.body.name
 const password= req.body.password
 const hashedPassword=await bcrypt.hash(password,5)
 try{
 await UserModel.create({
-    username,
+    email,
+    name,
     password: hashedPassword
 })
 res.json({
     message: "You are successfully Signed Up!"
 })
 }catch(e){
+    
 res.status(403).json({
     error: "Error occured. Please try again!"
 })    
@@ -60,22 +68,22 @@ if(!response.success){
     })
     return
 }
-const username= req.body.username
+const email= req.body.email
 const password= req.body.password
 try{
 const findUser=await UserModel.findOne({
-    username: username
+    email
 })
 
 if(!findUser){
-    res.status(403).json({
+    res.json({
         message: "User does not exist!"
     })
     return
 }
 const check=await bcrypt.compare(password,findUser.password)
 if(!check){
-    res.status(403).json({
+    res.json({
         message: "Wrong Password!"
     })
     return
@@ -98,15 +106,18 @@ res.json({
 })
 
 app.post('/create',auth,async function(req,res){
-    const link= req.body.link
+    const content= req.body.content
     const type= req.body.type
     const title= req.body.title
+    const subtitle= req.body.subtitle
     const tags= req.body.tags
 const response=createSchema.safeParse({
-    link,
+    content,
     type,
-    title
+    title,
+    subtitle
 })
+
 if(!response.success){
     res.status(411).json({
         error: "Invalid inputs!" 
@@ -115,12 +126,13 @@ if(!response.success){
 }
 try{
 await ContentModel.create({
-    link,
+    content,
     type,
     title,
+    subtitle,
     tags,
     //@ts-ignore
-    userId: req.id
+    userId: new ObjectId(req.id)
 })
 
 res.json({
@@ -128,6 +140,7 @@ res.json({
 })
     
 }catch(e){
+    
     res.status(403).json({
     error: "Error occured. Please try again!"
 })    
@@ -140,7 +153,7 @@ app.get('/allcontent',auth,async function(req,res){
   try{  
 const allContent=await ContentModel.find({
     //@ts-ignore
-    userId: req.id
+    userId: new ObjectId(req.id)
 })
   res.json({
     allContent: allContent
@@ -154,13 +167,13 @@ const allContent=await ContentModel.find({
 
 })
 
-app.delete('/delete',auth, async function(req,res){
-const contentId=req.body.contentId
+app.delete('/delete/:id',auth, async function(req,res){
+const contentId=req.params.id
 try{
 await ContentModel.deleteOne({
     _id: contentId,
     //@ts-ignore
-    userId: req.id
+    userId: new ObjectId(req.id)
 })
 res.json({
     message: "Content deleted."
@@ -178,13 +191,13 @@ res.json({
 
 })
 
-app.post('/share', auth, async function(req,res){
-const shareOn= req.body.shareOn
+app.get('/share/settings/:shareOn', auth, async function(req,res){
+const shareOn= Boolean(req.params.shareOn)
 try{
 if(!shareOn){
 await LinkModel.deleteOne({
     //@ts-ignore
-    userId: req.id
+    userId: new ObjectId(req.id)
 })
 
 res.json({
@@ -192,9 +205,9 @@ res.json({
 })
 return
 }
-const existingSharableId= LinkModel.findOne({
+const existingSharableId= await LinkModel.findOne({
     //@ts-ignore
-    userId: req.id
+    userId: new ObjectId(req.id)
 })
 if(existingSharableId){
     res.json({
@@ -208,7 +221,7 @@ const sharableId= nanoid()
 await LinkModel.create({
     hash: sharableId,
     //@ts-ignore
-    userId: req.id
+    userId: new ObjectId(req.id)
 })
 
 res.json({
@@ -222,10 +235,10 @@ res.json({
 
 })
 
-app.get('/share/:id',function(req,res){
+app.get('/share/content/:id', async function(req,res){
 const sharableId= req.params.id
 try{
-const response= LinkModel.findOne({
+const response= await LinkModel.findOne({
     hash: sharableId
 })
 if(!response){
@@ -236,7 +249,7 @@ if(!response){
 }
 //@ts-ignore
 const userId= response.userId
-const allContent= ContentModel.find({
+const allContent=await ContentModel.find({
     userId
 })
 
@@ -252,5 +265,31 @@ res.json({
 
 })
 
+app.post('/api/og', async (req, res) => {
+  const { url } = req.body;
 
-app.listen(3000)
+  if (!url) return res.status(400).json({ error: 'URL is required' });
+
+  try {
+    const { result } = await ogs({ url });
+    if (result.success) {
+      return res.json({
+        title: result.ogTitle || '',
+        description: result.ogDescription || '',
+        //@ts-ignore
+        image: result.ogImage?.url || '',
+        url: result.ogUrl || url,
+      });
+    } else {
+      return res.status(404).json({ error: 'No OG metadata found' });
+    }
+  } catch (err) {
+    return res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
+
+
+app.listen(3000, ()=>
+    console.log("Server is running")
+)

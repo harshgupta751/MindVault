@@ -1,39 +1,45 @@
 import React from 'react';
-import { Brain, Twitter, Play, FileText, Link, Hash } from 'lucide-react';
+import { Brain,NotebookText, Play, FileText, Link, Hash, LayoutGrid } from 'lucide-react';
 
 interface SidebarProps {
   activeItem?: string;
-  onItemClick?: (item: string) => void;
+  onItemClick: (item: string) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick }) => {
   const menuItems = [
-    {
-      id: 'tweets',
-      label: 'Tweets',
-      icon: Twitter,
+        {
+      id: 'all',
+      label: 'All',
+      icon: LayoutGrid,
       count: undefined
     },
     {
-      id: 'videos',
+      id: 'note',
+      label: 'Notes',
+      icon: NotebookText,
+      count: undefined
+    },
+    {
+      id: 'video',
       label: 'Videos',
       icon: Play,
       count: undefined
     },
     {
-      id: 'documents',
+      id: 'document',
       label: 'Documents',
       icon: FileText,
       count: undefined
     },
     {
-      id: 'links',
+      id: 'link',
       label: 'Links',
       icon: Link,
       count: undefined
     },
     {
-      id: 'tags',
+      id: 'tag',
       label: 'Tags',
       icon: Hash,
       count: undefined
@@ -43,12 +49,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick }) => {
   return (
     <div className="w-64 bg-white border-r border-gray-200 h-screen flex flex-col">
 
-      <div className="p-6 border-b border-gray-200">
+      <div className="p-9 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+          <div className="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center">
             <Brain className="w-5 h-5 text-white" />
           </div>
-          <h1 className="text-xl font-semibold text-gray-900">MindVault</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">MindVault</h1>
         </div>
       </div>
 
@@ -61,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick }) => {
             return (
               <li key={item.id}>
                 <button
-                  onClick={() => onItemClick?.(item.id)}
+                  onClick={() => onItemClick(item.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 text-left rounded-lg transition-colors ${
                     isActive
                       ? 'bg-indigo-50 text-indigo-700'

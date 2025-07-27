@@ -1,22 +1,26 @@
 import mongoose from 'mongoose'
 import { required } from 'zod/v4/core/util.cjs'
 const Schema= mongoose.Schema
-const ObjectId= Schema.Types.ObjectId
+export const ObjectId= mongoose.Types.ObjectId
 import dotenv from 'dotenv'
 dotenv.config()
 mongoose.connect(process.env.MongoDB_URL as string)
 
 const UserSchema= new Schema({
-username: {type: String,required: true, unique: true},
+email: {type: String,required: true, unique: true},
+name: {type: String, required:true},
 password: {type: String, required: true}
 })
 
 const ContentSchema= new Schema({
-link: {type: String, required:true},
-type: {type:String, enum:["Document", "Tweet", "Youtube","Link"], required:true },
+content: {type: String, required:true},
+type: {type:String, enum:["text", "video", "link", "document"], required:true },
 title: {type:String, required: true},
-tags: [{type: ObjectId, required:true,ref:'Tags'}],
+subtitle: {type:String},
+tags: {type: [String]},
 userId: {type:ObjectId, required: true,ref: 'Users'}
+},{
+    timestamps: true
 })
 
 const TagSchema= new Schema({
