@@ -108,6 +108,31 @@ res.json({
 
 })
 
+app.post('/resetpassword', async function(req, res){
+const email= req.body.email
+const findUser= await UserModel.findOne({
+    email
+})
+if(!findUser){
+res.status(404).json({
+    message: "Email not found!"
+})
+return
+}
+//@ts-ignore
+const token= jwt.sign(findUser._id, process.env.RESET_SECRET, {expiresIn: '15m'} )
+const resetURL= `http://localhost:5173/resetpassword?token=${token}`
+
+await sendResetEmail(email, resetURL)
+
+res.json({
+    message: "Reset link sent to your email"
+})
+
+})
+
+
+
 app.post('/create',auth,async function(req,res){
     const content= req.body.content
     const type= req.body.type
@@ -267,6 +292,7 @@ res.json({
 
 
 })
+
 
 app.use(bodyParser.json());
 

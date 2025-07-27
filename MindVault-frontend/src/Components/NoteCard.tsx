@@ -563,13 +563,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
     const year = date.getFullYear();
     const month = date.toLocaleString('en-US', { month: 'short' });
     const day = date.getDate().toString().padStart(2, '0');
-    const time = date.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: false
-    }).replace(/^24/, '00');
-
-    return `${day} ${month} ${year}, ${time}`;
+    return `${day}/${month}/${year}`;
   };
 
   // Fetch Open Graph data
