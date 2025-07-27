@@ -67,7 +67,8 @@ useEffect(() => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: content }),
         });
-        const data = await res.json();
+         const text = await res.text();
+  const data = text ? JSON.parse(text) : {};
         if (data.image) setOgThumbnail(data.image);
       } catch (e) {
         console.error('OG thumbnail fetch failed:', e);
@@ -142,14 +143,17 @@ const getDomainFromURL = (url: string) => {
 
  {type === 'video' && ogThumbnail && content && (
   <div className="rounded-lg overflow-hidden mb-3">
-    <a href={content} target="_blank" rel="noopener noreferrer">
-      <img
-        src={ogThumbnail}
-        alt="YouTube Video"
-        className="w-full h-32 object-cover"
-        loading="lazy"
-      />
+     <a href={content} target="_blank" rel="noopener noreferrer">
+       <img
+         src={ogThumbnail}
+         alt="YouTube Video"
+       className="w-full h-32 object-cover"
+         loading="lazy"
+     />
     </a>
+
+
+
     {/* <p className="text-xs text-blue-600 mt-1 break-all underline">{content}</p> */}
     <p className="text-xs text-blue-600 mt-1 break-all underline">
   {getDomainFromURL(content)}

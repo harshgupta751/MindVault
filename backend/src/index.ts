@@ -271,9 +271,10 @@ app.post('/api/og', async (req, res) => {
   if (!url) return res.status(400).json({ error: 'URL is required' });
 
   try {
-    const { result } = await ogs({ url });
+    const { result } = await ogs({ url, timeout: 5000 });
+
     if (result.success) {
-      return res.json({
+      return res.status(200).json({
         title: result.ogTitle || '',
         description: result.ogDescription || '',
         //@ts-ignore
@@ -281,12 +282,14 @@ app.post('/api/og', async (req, res) => {
         url: result.ogUrl || url,
       });
     } else {
-      return res.status(404).json({ error: 'No OG metadata found' });
+      return res.status(200).json({ title: '', description: '', image: '', url });
     }
   } catch (err) {
-    return res.status(500).json({ error: 'Something went wrong' });
+    console.error("OG SCRAPE ERROR:", err);
+    return res.status(200).json({ title: '', description: '', image: '', url });
   }
 });
+
 
 
 

@@ -265,9 +265,9 @@ app.post('/api/og', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     if (!url)
         return res.status(400).json({ error: 'URL is required' });
     try {
-        const { result } = yield (0, open_graph_scraper_1.default)({ url });
+        const { result } = yield (0, open_graph_scraper_1.default)({ url, timeout: 5000 });
         if (result.success) {
-            return res.json({
+            return res.status(200).json({
                 title: result.ogTitle || '',
                 description: result.ogDescription || '',
                 //@ts-ignore
@@ -276,11 +276,12 @@ app.post('/api/og', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
         }
         else {
-            return res.status(404).json({ error: 'No OG metadata found' });
+            return res.status(200).json({ title: '', description: '', image: '', url });
         }
     }
     catch (err) {
-        return res.status(500).json({ error: 'Something went wrong' });
+        console.error("OG SCRAPE ERROR:", err);
+        return res.status(200).json({ title: '', description: '', image: '', url });
     }
 }));
 app.listen(3000, () => console.log("Server is running"));
