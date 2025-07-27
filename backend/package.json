@@ -14,10 +14,11 @@
   "type": "commonjs",
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
+    "axios": "^1.11.0",
     "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "cheerio": "^1.1.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
@@ -27,7 +28,15 @@
     "mongoose": "^8.16.4",
     "nanoid": "^5.1.5",
     "open-graph-scraper": "^6.10.0",
-    "typescript": "^5.8.3",
     "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/body-parser": "^1.19.6",
+    "@types/cheerio": "^0.22.35",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.1.0",
+    "typescript": "^5.8.3"
   }
 }

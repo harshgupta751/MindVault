@@ -19,7 +19,8 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const middleware_1 = require("./middleware");
-const open_graph_scraper_1 = __importDefault(require("open-graph-scraper"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const og_1 = __importDefault(require("./og"));
 const nanoid_1 = require("nanoid");
 const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
@@ -259,29 +260,6 @@ app.get('/share/content/:id', function (req, res) {
         }
     });
 });
-app.post('/api/og', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const { url } = req.body;
-    if (!url)
-        return res.status(400).json({ error: 'URL is required' });
-    try {
-        const { result } = yield (0, open_graph_scraper_1.default)({ url, timeout: 5000 });
-        if (result.success) {
-            return res.status(200).json({
-                title: result.ogTitle || '',
-                description: result.ogDescription || '',
-                //@ts-ignore
-                image: ((_a = result.ogImage) === null || _a === void 0 ? void 0 : _a.url) || '',
-                url: result.ogUrl || url,
-            });
-        }
-        else {
-            return res.status(200).json({ title: '', description: '', image: '', url });
-        }
-    }
-    catch (err) {
-        console.error("OG SCRAPE ERROR:", err);
-        return res.status(200).json({ title: '', description: '', image: '', url });
-    }
-}));
+app.use(body_parser_1.default.json());
+app.use('/api/og', og_1.default);
 app.listen(3000, () => console.log("Server is running"));

@@ -7,8 +7,11 @@ import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import { auth } from './middleware'
 import ogs from 'open-graph-scraper'
+import bodyParser from 'body-parser';
+import ogRouter from './og'
 import {nanoid} from 'nanoid'
 import cors from 'cors'
+
 
 dotenv.config()
 
@@ -265,32 +268,9 @@ res.json({
 
 })
 
-app.post('/api/og', async (req, res) => {
-  const { url } = req.body;
+app.use(bodyParser.json());
 
-  if (!url) return res.status(400).json({ error: 'URL is required' });
-
-  try {
-    const { result } = await ogs({ url, timeout: 5000 });
-
-    if (result.success) {
-      return res.status(200).json({
-        title: result.ogTitle || '',
-        description: result.ogDescription || '',
-        //@ts-ignore
-        image: result.ogImage?.url || '',
-        url: result.ogUrl || url,
-      });
-    } else {
-      return res.status(200).json({ title: '', description: '', image: '', url });
-    }
-  } catch (err) {
-    console.error("OG SCRAPE ERROR:", err);
-    return res.status(200).json({ title: '', description: '', image: '', url });
-  }
-});
-
-
+app.use('/api/og', ogRouter);
 
 
 app.listen(3000, ()=>
