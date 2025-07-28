@@ -16,6 +16,10 @@ export const ForgotPasswordForm: any = () => {
 const navigate= useNavigate()
 const emailSchema= z.string().email()
 const onSubmit = async (email: string)=>{
+  if(!email){
+    toast.error("Enter email!")
+    return
+  }
 const result= emailSchema.safeParse(email)
 if(!result.success){
   toast.error("Enter valid email!")

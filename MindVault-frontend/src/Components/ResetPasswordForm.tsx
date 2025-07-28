@@ -20,11 +20,11 @@ export const ResetPasswordForm: any = () => {
 const navigate= useNavigate()
 const onSubmit= async ()=>{
 if(!password){
-    toast.error("Password cannot be empty!")
+    toast.error("Enter new password!")
     return
 }
 if(!confirmPassword){
-    toast.error("Confirm password cannot be empty!")
+    toast.error("Enter confirm password!")
      return
 }
 if(password.length<6){
@@ -97,7 +97,7 @@ setIsSubmitted(true)
      
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+               New Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -126,7 +126,7 @@ setIsSubmitted(true)
 
                   <div>
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirm Password
+                  Confirm New Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

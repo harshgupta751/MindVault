@@ -357,7 +357,7 @@ setSubtitle("");
 
 }
 catch(e){
-toast.error("Error occured. Please try again!")
+toast.error("Error in adding occured. Please try again!")
 
 }
 

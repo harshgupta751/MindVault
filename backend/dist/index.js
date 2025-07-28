@@ -204,6 +204,7 @@ app.post('/create', middleware_1.auth, function (req, res) {
                 title,
                 subtitle,
                 tags,
+                isImportant: false,
                 //@ts-ignore
                 userId: new db_1.ObjectId(req.id)
             });
@@ -318,6 +319,27 @@ app.get('/share/content/:id', function (req, res) {
             });
             res.json({
                 allContent
+            });
+        }
+        catch (e) {
+            res.status(403).json({
+                error: "Error occured. Please try again!"
+            });
+        }
+    });
+});
+app.post('/toggleimportant', function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const contentId = req.body.contentId;
+        const isImportant = req.body.isImportant;
+        try {
+            yield db_1.ContentModel.updateOne({
+                _id: contentId
+            }, {
+                isImportant: !isImportant
+            });
+            res.json({
+                message: "Updated successfully!"
             });
         }
         catch (e) {

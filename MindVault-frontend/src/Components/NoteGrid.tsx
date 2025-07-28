@@ -9,16 +9,17 @@ interface Note {
   content?: string;
   thumbnailUrl?: string;
   tags: string[];
+  isImportant: boolean;
   createdAt: string;
 }
 
 interface NoteGridProps {
   notes: Note[];
-  onShareNote?: (noteId: string) => void;
+  toggleImportant?: (noteId: string, isImportant: boolean) => void;
   onDeleteNote?: (noteId: string) => void;
 }
 
-const NoteGrid: React.FC<NoteGridProps> = ({ notes, onShareNote, onDeleteNote }) => {
+const NoteGrid: React.FC<NoteGridProps> = ({ notes, toggleImportant, onDeleteNote }) => {
   return (
     <>
     {notes.length==0?
@@ -36,8 +37,9 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes, onShareNote, onDeleteNote })
           content={note.content}
           thumbnailUrl={note.thumbnailUrl}
           tags={note.tags}
+          isImportant={note.isImportant}
           createdAt={note.createdAt}
-          onShare={() => onShareNote?.(note._id)}
+          onToggleImportant={() => toggleImportant?.(note._id, note.isImportant)}
           onDelete={() => onDeleteNote?.(note._id)}
         />
       ))}

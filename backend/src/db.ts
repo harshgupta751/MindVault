@@ -18,6 +18,7 @@ type: {type:String, enum:["text", "video", "link", "document"], required:true },
 title: {type:String, required: true},
 subtitle: {type:String},
 tags: {type: [String]},
+isImportant: {type: Boolean, required: true},
 userId: {type:ObjectId, required: true,ref: 'Users'}
 },{
     timestamps: true

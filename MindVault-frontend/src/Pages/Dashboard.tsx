@@ -634,9 +634,15 @@ if(debouncedValue){
 //@ts-ignore
 filteredContent=filteredContent.filter((ele)=>ele.title.toLowerCase().includes(debouncedValue.toLowerCase()))
 }
-if(activeMenuItem!='all'){
+if(activeMenuItem!='all' && activeMenuItem!='important'){
+  //@ts-ignore
 filteredContent=filteredContent.filter((ele)=> ele.type===activeMenuItem)
 }
+if(activeMenuItem=='important'){
+  //@ts-ignore
+filteredContent= filteredContent.filter((ele)=> ele.isImportant)
+}
+
 setFilteredNotes(filteredContent)
 return function(){
   setFilteredNotes([])
@@ -644,18 +650,18 @@ return function(){
 
   }, [debouncedValue, activeMenuItem, notes])
 
-  const handleShareNote = (noteId: string) => {
-   
-    const note = filteredNotes.find(n => n._id === noteId);
-    
-    setShareData({
-      type: 'note',
-      //@ts-ignore
-      title: note?.title || 'Untitled Note',
-      link: `https://mindvault.app/shared/note/${noteId}`,
-      isCopied: false
-    });
-    setIsShareModalOpen(true);
+  const handleToggleImportant =async  (noteId: string, isImportant: boolean) => {
+    try{
+   await axiosInstance.post('/toggleimportant',{
+    contentId: noteId,
+    isImportant: isImportant
+   })
+getContent()
+
+  }catch(e){
+    toast.error("Error occured. Please try again!")
+  }
+
   };
 
   const handleDeleteNote = async (noteId: string) => {
@@ -754,7 +760,7 @@ if(checked){
         <main className="flex-1 p-4 sm:p-6 lg:p-8 pt-28 sm:pt-32 lg:pt-36 pb-16 sm:pb-20 lg:pb-24 overflow-y-auto">
           <NoteGrid
             notes={filteredNotes}
-            onShareNote={handleShareNote}
+            toggleImportant={handleToggleImportant}
             onDeleteNote={handleDeleteNote}
           />
         </main>

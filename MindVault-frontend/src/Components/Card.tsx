@@ -54,10 +54,9 @@ const Card: React.FC<CardProps> = ({
         </div>
         <div className="flex items-center gap-1">
           <button
-            onClick={onShare}
             className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
           >
-            <Share className="w-4 h-4" />
+            <Brain className="w-4 h-4" />
           </button>
           <button
             onClick={onDelete}

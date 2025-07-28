@@ -5,6 +5,7 @@ import { SignIn } from './Pages/SignIn'
 import { ForgotPasswordForm } from './components/ForgotPasswordForm'
 import { ResetPasswordForm } from './components/ResetPasswordForm'
 import { Toaster } from 'react-hot-toast'
+import { SharedDashboard } from './components/SharedDashboard'
 
 
 
@@ -20,6 +21,7 @@ function App() {
          <Route path='/forgotpassword' element={<ForgotPasswordForm/>}></Route>
          <Route path='/resetpassword' element={<ResetPasswordForm/>}></Route>
         <Route path='/dashboard' element={<Dashboard/>}></Route>
+        <Route path='/share' element={<SharedDashboard/>}></Route>
       </Routes>
     </>
   )

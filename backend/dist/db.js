@@ -21,6 +21,7 @@ const ContentSchema = new Schema({
     title: { type: String, required: true },
     subtitle: { type: String },
     tags: { type: [String] },
+    isImportant: { type: Boolean, required: true },
     userId: { type: exports.ObjectId, required: true, ref: 'Users' }
 }, {
     timestamps: true

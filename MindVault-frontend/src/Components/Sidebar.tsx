@@ -1,5 +1,5 @@
 import React from 'react';
-import { Brain,NotebookText, Play, FileText, Link, Hash, LayoutGrid } from 'lucide-react';
+import { Brain,NotebookText, Play, FileText, Link, Hash, LayoutGrid, Star } from 'lucide-react';
 
 interface SidebarProps {
   activeItem?: string;
@@ -39,9 +39,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick }) => {
       count: undefined
     },
     {
-      id: 'tag',
-      label: 'Tags',
-      icon: Hash,
+      id: 'important',
+      label: 'Important',
+      icon: Star,
       count: undefined
     }
   ];

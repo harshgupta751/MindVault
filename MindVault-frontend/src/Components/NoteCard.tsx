@@ -485,7 +485,8 @@
 // src/components/NoteCard.tsx
 import React, { useEffect, useState, useRef } from 'react';
 import type { SyntheticEvent } from 'react';
-import { Share, Trash2, FileText, Video, Link, Hash, Image as ImageIcon } from 'lucide-react';
+import { Star, StarOff, Trash2, FileText, Video, Link, Hash, Image as ImageIcon } from 'lucide-react';
+import { FaStar, FaRegStar } from 'react-icons/fa';
 import Button from './Button'; // Assuming Button is a TypeScript component
 
 interface NoteCardProps {
@@ -495,8 +496,9 @@ interface NoteCardProps {
   content?: string;
   thumbnailUrl?: string;
   tags: string[];
+  isImportant: boolean;
   createdAt: string;
-  onShare?: () => void;
+  onToggleImportant?: () => void;
   onDelete?: () => void;
 }
 
@@ -513,8 +515,9 @@ const NoteCard: React.FC<NoteCardProps> = ({
   content,
   thumbnailUrl,
   tags,
+  isImportant,
   createdAt,
-  onShare,
+ onToggleImportant,
   onDelete,
 }) => {
   const [ogThumbnail, setOgThumbnail] = useState<string | null>(null);
@@ -705,13 +708,15 @@ const NoteCard: React.FC<NoteCardProps> = ({
           </h3>
         </div>
         <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            icon={Share}
-            onClick={onShare}
-            className="p-1.5 text-gray-400 hover:text-gray-600"
-          />
+<button onClick={onToggleImportant} className="p-2 rounded-full cursor-pointer">
+  {isImportant ? (
+    <FaStar className="text-yellow-500 dark:text-yellow-400 text-xl" />
+  ) : (
+    <FaRegStar className="text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-400 text-xl" />
+  )}
+</button>
+
+
           <Button
             variant="ghost"
             size="sm"

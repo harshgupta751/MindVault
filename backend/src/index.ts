@@ -207,6 +207,7 @@ await ContentModel.create({
     title,
     subtitle,
     tags,
+     isImportant: false,
     //@ts-ignore
     userId: new ObjectId(req.id)
 })
@@ -340,6 +341,28 @@ res.json({
 
 
 })
+
+app.post('/toggleimportant', async function(req, res){
+const contentId= req.body.contentId
+const isImportant= req.body.isImportant
+try{
+await ContentModel.updateOne({
+    _id: contentId
+},{
+    isImportant: !isImportant
+})
+
+res.json({
+    message: "Updated successfully!"
+})
+}catch(e){
+   res.status(403).json({
+    error: "Error occured. Please try again!"
+})  
+}
+
+})
+
 
 
 app.use(bodyParser.json());

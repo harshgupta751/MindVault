@@ -29,7 +29,7 @@ const navigate= useNavigate()
 const emailSchema= z.string().email()
 const handleSignUp=async ()=>{
   if(!name){
-    toast.error("Full name must not be empty!");
+    toast.error("Full name is required!");
     return
   }
 if(name.length<3){
@@ -37,7 +37,7 @@ if(name.length<3){
   return
 }
   if(!email){
-   toast.error("Email must not be empty!");
+   toast.error("Email is required!");
     return
   }
 
@@ -47,7 +47,7 @@ if(!res.success){
   return
 }
 if(!password){
-  toast.error("Password should not be empty!");
+  toast.error("Password is required!");
   return
 }
 if(password.length<6){
@@ -96,7 +96,7 @@ navigate('/dashboard')
 
 const handleSignIn=async ()=>{
    if(!email){
-    toast.error("Email must not be empty!");
+    toast.error("Email is required!");
     return
   }
 const res=emailSchema.safeParse(email);
@@ -105,7 +105,7 @@ if(!res.success){
   return
 }
 if(!password){
-  toast.error("Password should not be empty!");
+  toast.error("Password is required!");
   return
 }
 try{
