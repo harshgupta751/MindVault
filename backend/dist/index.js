@@ -23,6 +23,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const og_1 = __importDefault(require("./og"));
 const nanoid_1 = require("nanoid");
 const cors_1 = __importDefault(require("cors"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
@@ -107,6 +108,72 @@ app.post('/signin', function (req, res) {
         catch (e) {
             res.status(500).json({
                 error: "Error occured. Please try again!"
+            });
+        }
+    });
+});
+app.post('/resetpassword', function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const email = req.body.email;
+        try {
+            const findUser = yield db_1.UserModel.findOne({
+                email
+            });
+            if (!findUser) {
+                res.status(404).json({
+                    message: "Email not found!"
+                });
+                return;
+            }
+            //@ts-ignore
+            const token = jsonwebtoken_1.default.sign({
+                userId: findUser._id
+            }, process.env.RESET_SECRET, { expiresIn: '15m' });
+            const resetLink = `http://localhost:5173/resetpassword?token=${token}`;
+            const transporter = nodemailer_1.default.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.MAIL_USER,
+                    pass: process.env.MAIL_PASS
+                }
+            });
+            yield transporter.sendMail({
+                from: 'MindVault <no-reply@mindvault.com>',
+                to: email,
+                subject: "Reset Password",
+                html: `<p>Click <a href="${resetLink}">here</a> to reset your password. Link expires in 15 minutes.</p>`
+            });
+            res.json({
+                message: "Reset link sent to your email"
+            });
+        }
+        catch (e) {
+            res.status(500).json({
+                error: "Error occured. Please try again!"
+            });
+        }
+    });
+});
+app.post('/createnewpassword', function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const token = req.body.token;
+        const password = req.body.password;
+        try {
+            const decoded = jsonwebtoken_1.default.verify(token, process.env.RESET_SECRET);
+            const hashedPassword = yield bcrypt_1.default.hash(password, 5);
+            yield db_1.UserModel.updateOne({
+                //@ts-ignore
+                _id: decoded.userId
+            }, {
+                password: hashedPassword
+            });
+            res.json({
+                message: "Password reset successfully!"
+            });
+        }
+        catch (e) {
+            res.status(400).json({
+                error: "Invalid token"
             });
         }
     });

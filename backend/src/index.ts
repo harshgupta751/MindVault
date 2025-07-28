@@ -11,7 +11,8 @@ import bodyParser from 'body-parser';
 import ogRouter from './og'
 import {nanoid} from 'nanoid'
 import cors from 'cors'
-
+import nodemailer from 'nodemailer'
+import { error } from 'console'
 
 dotenv.config()
 
@@ -110,6 +111,7 @@ res.json({
 
 app.post('/resetpassword', async function(req, res){
 const email= req.body.email
+try{
 const findUser= await UserModel.findOne({
     email
 })
@@ -120,14 +122,60 @@ res.status(404).json({
 return
 }
 //@ts-ignore
-const token= jwt.sign(findUser._id, process.env.RESET_SECRET, {expiresIn: '15m'} )
-const resetURL= `http://localhost:5173/resetpassword?token=${token}`
+const token= jwt.sign({
+    userId: findUser._id
+}, process.env.RESET_SECRET as string, {expiresIn: '15m'} )
+const resetLink= `http://localhost:5173/resetpassword?token=${token}`
 
-await sendResetEmail(email, resetURL)
+const transporter= nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
+    }
+})
+
+await transporter.sendMail({
+    from: 'MindVault <no-reply@mindvault.com>',
+    to: email,
+    subject: "Reset Password",
+    html: `<p>Click <a href="${resetLink}">here</a> to reset your password. Link expires in 15 minutes.</p>`
+})
+
 
 res.json({
     message: "Reset link sent to your email"
 })
+
+}catch(e){
+    res.status(500).json({
+        error: "Error occured. Please try again!"
+    })
+}
+})
+
+app.post('/createnewpassword', async function(req, res){
+    const token= req.body.token
+const password= req.body.password;
+try{
+const decoded= jwt.verify(token, process.env.RESET_SECRET as string)
+const hashedPassword= await bcrypt.hash(password, 5)
+await UserModel.updateOne({
+    //@ts-ignore
+    _id: decoded.userId
+},{
+    password: hashedPassword
+})
+
+res.json({
+    message: "Password reset successfully!"
+})
+
+}catch(e){
+    res.status(400).json({
+        error: "Invalid token"
+    })
+}
 
 })
 

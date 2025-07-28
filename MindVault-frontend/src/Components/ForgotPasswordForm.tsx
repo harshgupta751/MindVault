@@ -2,16 +2,44 @@ import React from 'react';
 import { Brain, Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import Button from './Button';
 import {  useNavigate } from 'react-router-dom';
+import axiosInstance from '../api/axiosInstance';
+import {z} from 'zod'
+import { toast } from 'react-hot-toast';
 export const ForgotPasswordForm: any = () => {
   const [email, setEmail] = React.useState('');
   const [isSubmitted, setIsSubmitted] = React.useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
     onSubmit?.(email);
   };
 const navigate= useNavigate()
+const emailSchema= z.string().email()
+const onSubmit = async (email: string)=>{
+const result= emailSchema.safeParse(email)
+if(!result.success){
+  toast.error("Enter valid email!")
+  return
+}
+
+  try{
+const response= await axiosInstance.post('/resetpassword', {
+  email
+})
+
+if(response.status==404){
+  toast.error("Email not found!")
+  return
+}
+if(response.status==200){
+  toast.success( "Reset link sent to your email")
+    setIsSubmitted(true);
+}
+  }catch(e){
+    toast.error("Error occured. Please try again!")
+  }
+}
+
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
@@ -22,7 +50,7 @@ const navigate= useNavigate()
               <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
                 <Brain className="w-7 h-7 text-white" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Second Brain</h1>
+              <h1 className="text-2xl font-bold text-gray-900">MindVault</h1>
             </div>
           </div>
 
@@ -56,7 +84,7 @@ const navigate= useNavigate()
               <Button
                 variant="ghost"
                 className="w-full py-3 text-base font-medium"
-                onClick={onBackToLogin}
+                onClick={()=>navigate('/')}
                 icon={ArrowLeft}
               >
                 Back to Sign In

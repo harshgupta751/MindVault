@@ -4,6 +4,8 @@ import Button from './Button';
 import {z} from 'zod';
 import axiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import type { id } from 'zod/locales';
+import toast from 'react-hot-toast';
 
 
 interface AuthFormProps {
@@ -20,47 +22,47 @@ const AuthForm: React.FC<AuthFormProps> = ({
   const [name, setName] =  useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("")
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 const navigate= useNavigate()
   const isLogin = mode === 'login';
-const emailSchema= z.email()
+const emailSchema= z.string().email()
 const handleSignUp=async ()=>{
   if(!name){
-    setError("Full name must not be empty!");
+    toast.error("Full name must not be empty!");
     return
   }
 if(name.length<3){
-  setError("Full name must be atleast 3 characters!");
+  toast.error("Full name must be atleast 3 characters!");
   return
 }
   if(!email){
-    setError("Email must not be empty!");
+   toast.error("Email must not be empty!");
     return
   }
 
 const res=emailSchema.safeParse(email);
 if(!res.success){
-  setError("Enter valid email!");
+  toast.error("Enter valid email!");
   return
 }
 if(!password){
-  setError("Password should not be empty!");
+  toast.error("Password should not be empty!");
   return
 }
 if(password.length<6){
-  setError("Password should be atleast 6 characters!")
+  toast.error("Password should be atleast 6 characters!")
   return
 }
 if(!confirmPassword){
-  setError("Enter confirm password!");
+  toast.error("Enter confirm password!");
   return
 }
 if(password!=confirmPassword){
-  setError("Passwords do not match!");
+  toast.error("Passwords do not match!");
   return;
 }
+ const toastId= toast.loading("Signing up...")
 try{
 const response= await axiosInstance.post('/signup',{
   email,
@@ -70,7 +72,7 @@ const response= await axiosInstance.post('/signup',{
  //@ts-ignore
 if(response.data.message==="User already exists!"){
    //@ts-ignore
-  setError(response.data.message)
+   toast.error("User already exists!", {id: toastId})
   return
 }else{
   const res= await axiosInstance.post('/signin',{
@@ -78,10 +80,13 @@ if(response.data.message==="User already exists!"){
     password
   })
 localStorage.setItem('token', res.data.token)
-    navigate('/dashboard')
+toast.success("SignUp successfull. Redirecting...", {id: toastId})
+setTimeout(()=>{
+navigate('/dashboard')
+},2000)
 }
 }catch(e){
-  setError("Error occured. Please try again!")
+  toast.error("Error occured. Please try again!", {id: toastId})
 }
 
 }
@@ -91,16 +96,16 @@ localStorage.setItem('token', res.data.token)
 
 const handleSignIn=async ()=>{
    if(!email){
-    setError("Email must not be empty!");
+    toast.error("Email must not be empty!");
     return
   }
 const res=emailSchema.safeParse(email);
 if(!res.success){
-  setError("Enter valid email!");
+  toast.error("Enter valid email!");
   return
 }
 if(!password){
-  setError("Password should not be empty!");
+  toast.error("Password should not be empty!");
   return
 }
 try{
@@ -113,22 +118,19 @@ if(response.data.token){
    //@ts-ignore
 localStorage.setItem("token",response.data.token)
 navigate('/dashboard')
-}else{
+
+}else if(response.data.message=="User does not exist!"){
    //@ts-ignore
-   setError(response.data.message)
+   toast.error("User does not exist!")
+}
+else if(response.data.message=="Wrong Password!"){
+    toast.error("Wrong Password!")
 }
 }catch(e){
-  setError("Error occured. Please try again!")
+  toast.error("Error occured. Please try again!")
 }
 
 }
-
-
-
-
-
-
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
