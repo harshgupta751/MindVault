@@ -40,7 +40,7 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes, toggleImportant, onDeleteNot
           isImportant={note.isImportant}
           createdAt={note.createdAt}
           onToggleImportant={() => toggleImportant?.(note._id, note.isImportant)}
-          onDelete={() => onDeleteNote?.(note._id)}
+          onDelete={onDeleteNote? () => onDeleteNote(note._id) : undefined}
         />
       ))}
     </div>

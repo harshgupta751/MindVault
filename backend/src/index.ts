@@ -1,5 +1,5 @@
 import express, { response } from 'express'
-import { success } from 'zod'
+import { boolean, success } from 'zod'
 import {createSchema, signInSchema, signUpSchema} from './validators' 
 import { ContentModel, LinkModel, UserModel,ObjectId } from './db'
 import jwt from 'jsonwebtoken'
@@ -268,8 +268,8 @@ res.json({
 
 })
 
-app.get('/share/settings/:shareOn', auth, async function(req,res){
-const shareOn= Boolean(req.params.shareOn)
+app.post('/share/settings/:shareOn', auth, async function(req,res){
+const shareOn= boolean(req.params.shareOn)
 try{
 if(!shareOn){
 await LinkModel.deleteOne({
@@ -289,7 +289,7 @@ const existingSharableId= await LinkModel.findOne({
 if(existingSharableId){
     res.json({
         //@ts-ignore
-        sharableId: `/share/${existingSharableId.hash}`
+        sharableId: `/share?id=${existingSharableId.hash}`
     })
     return
 }
@@ -302,7 +302,7 @@ await LinkModel.create({
 })
 
 res.json({
-    sharableId: `/share/${sharableId}`
+    sharableId: `/share?id=${sharableId}`
 })
 }catch(e){
  res.status(403).json({
@@ -311,6 +311,7 @@ res.json({
 }
 
 })
+
 
 app.get('/share/content/:id', async function(req,res){
 const sharableId= req.params.id
@@ -342,7 +343,31 @@ res.json({
 
 })
 
-app.post('/toggleimportant', async function(req, res){
+app.get('/sharemode',auth, async function(req,res){
+    try{
+const response= await LinkModel.findOne({
+    //@ts-ignore
+    userId: new ObjectId(req.id)
+})
+if(!response){
+    res.json({
+        shareOn: false
+    })
+}else{
+    res.json({
+        shareOn: true
+    })
+}
+    }catch(e){
+           res.status(403).json({
+    error: "Error occured. Please try again!"
+})  
+    }
+
+})
+
+
+app.post('/toggleimportant', auth, async function(req, res){
 const contentId= req.body.contentId
 const isImportant= req.body.isImportant
 try{

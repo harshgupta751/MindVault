@@ -580,7 +580,7 @@ import { useNavigate } from 'react-router-dom';
 import {toast} from 'react-hot-toast'
 import axiosInstance from '../api/axiosInstance';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { CheckboxAtom, inputAtom, typeAtom } from '../store/atoms';
+import { accessTypeAtom, inputAtom, typeAtom } from '../store/atoms';
 import useDebounce from '../hooks/useDebounce';
 
 export const Dashboard = () => {
@@ -591,8 +591,6 @@ export const Dashboard = () => {
   // Sharable Link Modal State
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareData, setShareData] = useState({
-    type: 'brain' as 'note' | 'brain',
-    title: '',
     link: '',
     isCopied: false
   });
@@ -611,7 +609,7 @@ export const Dashboard = () => {
 
 const searchQuery  = useRecoilValue(inputAtom)
 const debouncedValue= useDebounce(searchQuery,500)
-const checked = useRecoilValue(CheckboxAtom)
+const [accessType,setAccessType] = useRecoilState(accessTypeAtom)
 
 
 
@@ -650,6 +648,32 @@ return function(){
 
   }, [debouncedValue, activeMenuItem, notes])
 
+
+  useEffect(()=>{
+
+  async function temperoryFunction(){
+    try{
+    const response= await axiosInstance.get('/sharemode')
+        if(response.status===403){
+          toast.error("Error occured. Please refresh the page!")
+        }
+        else if(response.data.shareOn===true){
+          setAccessType('public')
+        }else if(response.data.shareOn===false){
+          setAccessType('restricted')
+        }
+    }catch(e){
+      toast.error("Error occured. Please refresh the page!")
+    }
+
+    }
+
+    temperoryFunction()
+
+  },[])
+
+
+
   const handleToggleImportant =async  (noteId: string, isImportant: boolean) => {
     try{
    await axiosInstance.post('/toggleimportant',{
@@ -663,6 +687,13 @@ getContent()
   }
 
   };
+
+
+  useEffect(()=>{
+
+handleShareBrain()
+
+  },[accessType])
 
   const handleDeleteNote = async (noteId: string) => {
     try{
@@ -679,26 +710,23 @@ getContent()
 
   const handleShareBrain = async () => {
 try{
-const response= await axiosInstance.get(`/share/settings/${checked}`);
-if(checked){
+const response= await axiosInstance.post(`/share/settings/${accessType==='public'}`);
+if(accessType==='public'){
     setShareData({
-      type: 'brain',
-      title: 'My Brain Collection',
       link: `http://localhost:5173${response.data.sharableId}`,
       isCopied: false
     });
   }else{
         setShareData({
-      type: 'brain',
-      title: 'My Brain Collection',
       link: "",
       isCopied: false
     });
   }
+
 }catch(e){
   toast.error("Error occured. Please try again!")
 }
-    setIsShareModalOpen(true);
+
   };
 
   const handleAddContent = () => {
@@ -750,7 +778,7 @@ if(checked){
         {/* Fixed Header with higher z-index */}
         <div className="fixed top-0 right-0 left-64 z-30 bg-white shadow-sm">
           <Header 
-            onShareBrain={handleShareBrain}
+            onShareBrain={()=>setIsShareModalOpen(true)}
             onAddContent={handleAddContent}
             onLogout={handleLogout}
           />
@@ -775,8 +803,6 @@ if(checked){
       <ShareableLinkModal
         isOpen={isShareModalOpen}
         onClose={handleCloseShareModal}
-        shareType={shareData.type}
-        title={shareData.title}
         link={shareData.link}
         onCopyLink={handleCopyLink}
         isCopied={shareData.isCopied}

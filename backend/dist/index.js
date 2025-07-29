@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const zod_1 = require("zod");
 const validators_1 = require("./validators");
 const db_1 = require("./db");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -257,9 +258,9 @@ app.delete('/delete/:id', middleware_1.auth, function (req, res) {
         }
     });
 });
-app.get('/share/settings/:shareOn', middleware_1.auth, function (req, res) {
+app.post('/share/settings/:shareOn', middleware_1.auth, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const shareOn = Boolean(req.params.shareOn);
+        const shareOn = (0, zod_1.boolean)(req.params.shareOn);
         try {
             if (!shareOn) {
                 yield db_1.LinkModel.deleteOne({
@@ -278,7 +279,7 @@ app.get('/share/settings/:shareOn', middleware_1.auth, function (req, res) {
             if (existingSharableId) {
                 res.json({
                     //@ts-ignore
-                    sharableId: `/share/${existingSharableId.hash}`
+                    sharableId: `/share?id=${existingSharableId.hash}`
                 });
                 return;
             }
@@ -289,7 +290,7 @@ app.get('/share/settings/:shareOn', middleware_1.auth, function (req, res) {
                 userId: new db_1.ObjectId(req.id)
             });
             res.json({
-                sharableId: `/share/${sharableId}`
+                sharableId: `/share?id=${sharableId}`
             });
         }
         catch (e) {
@@ -328,7 +329,32 @@ app.get('/share/content/:id', function (req, res) {
         }
     });
 });
-app.post('/toggleimportant', function (req, res) {
+app.get('/sharemode', middleware_1.auth, function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const response = yield db_1.LinkModel.findOne({
+                //@ts-ignore
+                userId: new db_1.ObjectId(req.id)
+            });
+            if (!response) {
+                res.json({
+                    shareOn: false
+                });
+            }
+            else {
+                res.json({
+                    shareOn: true
+                });
+            }
+        }
+        catch (e) {
+            res.status(403).json({
+                error: "Error occured. Please try again!"
+            });
+        }
+    });
+});
+app.post('/toggleimportant', middleware_1.auth, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const contentId = req.body.contentId;
         const isImportant = req.body.isImportant;

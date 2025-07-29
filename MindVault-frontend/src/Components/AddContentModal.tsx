@@ -371,7 +371,7 @@ toast.error("Error in adding occured. Please try again!")
 
   const contentTypes = [
     {
-      id: 'text',
+      id: 'note',
       title: 'Text Note',
       description: 'Create a simple text note',
       icon: FileText,

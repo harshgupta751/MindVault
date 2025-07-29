@@ -485,7 +485,7 @@
 // src/components/NoteCard.tsx
 import React, { useEffect, useState, useRef } from 'react';
 import type { SyntheticEvent } from 'react';
-import { Star, StarOff, Trash2, FileText, Video, Link, Hash, Image as ImageIcon } from 'lucide-react';
+import { Trash2, FileText, Video, Link, Hash, Image as ImageIcon } from 'lucide-react';
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import Button from './Button'; // Assuming Button is a TypeScript component
 
@@ -716,14 +716,15 @@ const NoteCard: React.FC<NoteCardProps> = ({
   )}
 </button>
 
-
-          <Button
+{onDelete && 
+          (<Button
             variant="ghost"
             size="sm"
             icon={Trash2}
             onClick={onDelete}
             className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50"
-          />
+          />)
+          }
         </div>
       </div>
 

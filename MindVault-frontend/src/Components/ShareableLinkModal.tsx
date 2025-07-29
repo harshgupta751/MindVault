@@ -183,45 +183,29 @@
 import React, { useRef, useState } from 'react';
 import { X, Copy, Share2, Check } from 'lucide-react';
 import { useRecoilState } from 'recoil';
-import { CheckboxAtom } from '../store/atoms';
+import { accessTypeAtom } from '../store/atoms';
 
 interface ShareableLinkModalProps {
   isOpen: boolean;
   onClose: () => void;
-  shareType: 'note' | 'brain';
-  title?: string;
   link: string;
   onCopyLink?: () => void;
   isCopied?: boolean;
-  onAccessChange?: (accessType: 'restricted' | 'public') => void;
 }
 
 const ShareableLinkModal: React.FC<ShareableLinkModalProps> = ({
   isOpen,
   onClose,
-  shareType,
-  title,
   link,
   onCopyLink,
-  isCopied = false,
-  onAccessChange
+  isCopied = false
 }) => {
-  const [checked, setChecked] = useRecoilState(CheckboxAtom);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [accessType, setAccessType] = useState<'restricted' | 'public'>('public');
-  const [showRoleOptions, setShowRoleOptions] = useState(false);
+
+const [accessType, setAccessType] = useRecoilState(accessTypeAtom)
 
   if (!isOpen) return null;
 
-  const handleAccessChange = (type: 'restricted' | 'public') => {
-    setAccessType(type);
-    if (onAccessChange) onAccessChange(type);
-  };
 
-  const handleUpdateSettings = () => {
-    setChecked(inputRef.current?.checked ?? false);
-    onClose();
-  };
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -234,13 +218,8 @@ const ShareableLinkModal: React.FC<ShareableLinkModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-semibold text-gray-900">
-                Share {shareType === 'brain' ? 'Brain' : 'Note'}
+                Share Brain
               </h2>
-              {title && (
-                <p className="text-sm text-gray-500 truncate max-w-48">
-                  {title}
-                </p>
-              )}
             </div>
           </div>
           <button
@@ -260,13 +239,13 @@ const ShareableLinkModal: React.FC<ShareableLinkModalProps> = ({
             {/* Restricted Option */}
             <div 
               className="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition"
-              onClick={() => handleAccessChange('restricted')}
+              onClick={() => setAccessType('restricted')}
             >
               <div className="flex items-center h-5 mt-0.5">
                 <input
                   type="radio"
                   checked={accessType === 'restricted'}
-                  onChange={() => handleAccessChange('restricted')}
+                  onChange={() => setAccessType('restricted')}
                   className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                 />
               </div>
@@ -288,13 +267,13 @@ const ShareableLinkModal: React.FC<ShareableLinkModalProps> = ({
             {/* Public Option */}
             <div 
               className="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition"
-              onClick={() => handleAccessChange('public')}
+              onClick={() => setAccessType('public')}
             >
               <div className="flex items-center h-5 mt-0.5">
                 <input
                   type="radio"
                   checked={accessType === 'public'}
-                  onChange={() => handleAccessChange('public')}
+                  onChange={() => setAccessType('public')}
                   className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                 />
               </div>
@@ -314,7 +293,7 @@ const ShareableLinkModal: React.FC<ShareableLinkModalProps> = ({
                       <div>
                         <div className="text-sm font-medium text-gray-700">Viewer</div>
                         <div className="text-xs text-gray-500 mt-1">
-                          Viewers of this {shareType} can view content
+                          Viewers of this Brain can view content
                         </div>
                       </div>
                   
@@ -379,7 +358,7 @@ const ShareableLinkModal: React.FC<ShareableLinkModalProps> = ({
               Close
             </button>
             <button 
-              onClick={handleUpdateSettings}
+              onClick={onClose}
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Done

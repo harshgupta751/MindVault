@@ -14,7 +14,7 @@ password: {type: String, required: true}
 
 const ContentSchema= new Schema({
 content: {type: String, required:true},
-type: {type:String, enum:["text", "video", "link", "document"], required:true },
+type: {type:String, enum:["note", "video", "link", "document"], required:true },
 title: {type:String, required: true},
 subtitle: {type:String},
 tags: {type: [String]},
