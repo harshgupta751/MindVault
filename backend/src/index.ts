@@ -269,7 +269,7 @@ res.json({
 })
 
 app.post('/share/settings/:shareOn', auth, async function(req,res){
-const shareOn= boolean(req.params.shareOn)
+const shareOn= req.params.shareOn === 'true'
 try{
 if(!shareOn){
 await LinkModel.deleteOne({

@@ -595,7 +595,7 @@ export const Dashboard = () => {
     isCopied: false
   });
 
- 
+  const [hasInitializedAccessType, setHasInitializedAccessType] = useState(false) 
 
   async function getContent() {
     try {
@@ -659,8 +659,10 @@ return function(){
         }
         else if(response.data.shareOn===true){
           setAccessType('public')
+          setHasInitializedAccessType(true)
         }else if(response.data.shareOn===false){
           setAccessType('restricted')
+          setHasInitializedAccessType(true)
         }
     }catch(e){
       toast.error("Error occured. Please refresh the page!")
@@ -690,8 +692,9 @@ getContent()
 
 
   useEffect(()=>{
-
+if(hasInitializedAccessType){
 handleShareBrain()
+}
 
   },[accessType])
 

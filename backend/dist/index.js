@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const zod_1 = require("zod");
 const validators_1 = require("./validators");
 const db_1 = require("./db");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -260,7 +259,7 @@ app.delete('/delete/:id', middleware_1.auth, function (req, res) {
 });
 app.post('/share/settings/:shareOn', middleware_1.auth, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const shareOn = (0, zod_1.boolean)(req.params.shareOn);
+        const shareOn = req.params.shareOn === 'true';
         try {
             if (!shareOn) {
                 yield db_1.LinkModel.deleteOne({
