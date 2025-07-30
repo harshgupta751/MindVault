@@ -22,6 +22,7 @@ const middleware_1 = require("./middleware");
 const body_parser_1 = __importDefault(require("body-parser"));
 const og_1 = __importDefault(require("./og"));
 const upload_1 = __importDefault(require("./routes/upload"));
+const documentProxy_1 = __importDefault(require("./routes/documentProxy"));
 const nanoid_1 = require("nanoid");
 const cors_1 = __importDefault(require("cors"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
@@ -377,6 +378,7 @@ app.post('/toggleimportant', middleware_1.auth, function (req, res) {
 });
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/api', upload_1.default);
+app.use('/api', documentProxy_1.default);
 app.use(body_parser_1.default.json());
 app.use('/api/og', og_1.default);
 app.listen(3000, () => console.log("Server is running"));

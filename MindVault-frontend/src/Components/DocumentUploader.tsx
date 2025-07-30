@@ -46,7 +46,7 @@ setFilePreviewUrl(URL.createObjectURL(file));
         setUploading(false);
         if (xhr.status === 200) {
           const data = JSON.parse(xhr.responseText);
-          setContent(data.url);
+          setContent(data.publicId);
         } else {
           alert('Upload failed');
         }

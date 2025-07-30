@@ -10,6 +10,7 @@ import ogs from 'open-graph-scraper'
 import bodyParser from 'body-parser';
 import ogRouter from './og'
 import uploadRoutes from './routes/upload';
+import documentProxyRoutes from './routes/documentProxy';
 import {nanoid} from 'nanoid'
 import cors from 'cors'
 import nodemailer from 'nodemailer'
@@ -392,7 +393,7 @@ res.json({
 
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', uploadRoutes);
-
+app.use('/api', documentProxyRoutes);
 
 app.use(bodyParser.json());
 

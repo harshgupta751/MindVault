@@ -1,1 +1,1 @@
-{"root":["./src/db.ts","./src/index.ts","./src/middleware.ts","./src/og.ts","./src/validators.ts","./src/routes/upload.ts","./src/utils/cloudinary.ts"],"version":"5.8.3"}
+{"root":["./src/db.ts","./src/index.ts","./src/middleware.ts","./src/og.ts","./src/validators.ts","./src/routes/documentproxy.ts","./src/routes/upload.ts","./src/utils/cloudinary.ts"],"version":"5.8.3"}
