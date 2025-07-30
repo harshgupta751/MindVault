@@ -308,6 +308,7 @@
 import React, { useRef, useState } from 'react';
 import { FileText, Video, Link, Upload, Hash,X } from 'lucide-react';
 import Button from './Button';
+import DocumentUploader from './DocumentUploader';
 import axiosInstance from '../api/axiosInstance';
 import toast from 'react-hot-toast';
 import { useRecoilState } from 'recoil';
@@ -323,7 +324,7 @@ const [content, setContent] = useState("");
 const [type, setType] = useRecoilState(typeAtom)
 const [title, setTitle] = useState("");
 const [subtitle, setSubtitle] = useState("");
-const [tags, setTags] = useState([]);
+
 //@ts-ignore
 const tagRef= useRef<HTMLInputElement>()
 
@@ -363,10 +364,7 @@ toast.error("Error in adding occured. Please try again!")
 
 }
 
-
-
 }
-
 
 
   const contentTypes = [
@@ -399,6 +397,11 @@ toast.error("Error in adding occured. Please try again!")
       color: 'bg-orange-50 text-orange-600 border-orange-200'
     }
   ];
+
+
+
+
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -473,17 +476,21 @@ toast.error("Error in adding occured. Please try again!")
                 </div>
                 
                 <div>
-                  <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
-                    Content or URL
-                  </label>
-                  <textarea
-                    id="content"
-                    onChange={(e)=>setContent(e.target.value)}
-                    rows={4}
-                    placeholder="Paste a URL, write some text, or describe your content..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors resize-none"
-                  />
-                </div>
+  <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+    Content or URL
+  </label>
+  {type === 'document' ? (
+    <DocumentUploader setContent={setContent} />
+  ) : (
+    <textarea
+      value={content}
+      onChange={(e) => setContent(e.target.value)}
+      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
+      placeholder="Write your note here..."
+    />
+  )}
+</div>
+
 
                 <div>
                   <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">

@@ -9,6 +9,7 @@ import { auth } from './middleware'
 import ogs from 'open-graph-scraper'
 import bodyParser from 'body-parser';
 import ogRouter from './og'
+import uploadRoutes from './routes/upload';
 import {nanoid} from 'nanoid'
 import cors from 'cors'
 import nodemailer from 'nodemailer'
@@ -226,6 +227,7 @@ res.json({
 
 })
 
+
 app.get('/allcontent',auth,async function(req,res){
   try{  
 const allContent=await ContentModel.find({
@@ -388,6 +390,8 @@ res.json({
 
 })
 
+app.use(express.urlencoded({ extended: true }));
+app.use('/api', uploadRoutes);
 
 
 app.use(bodyParser.json());
