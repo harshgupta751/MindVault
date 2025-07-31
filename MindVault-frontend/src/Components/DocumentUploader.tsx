@@ -3,13 +3,16 @@
 // very final 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import {toast} from 'react-hot-toast'
 
-
-const DocumentUploader = ({ setContent }: { setContent: (url: string) => void }) => {
+const DocumentUploader = ({ setContent }: { setContent: (url: string) => void; }) => {
   const [fileName, setFileName] = useState<string>('');
   const [uploading, setUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
 const [filePreviewUrl, setFilePreviewUrl] = useState<string>('');
+
+
+
 useEffect(() => {
   return () => {
     if (filePreviewUrl) {
@@ -18,6 +21,10 @@ useEffect(() => {
   };
 }, [filePreviewUrl]);
 
+const onDropRejected = (fileRejections: any[]) => {
+  const rejectedTypes = fileRejections.map(rej => rej.file.type).join(', ');
+  toast.error(`File type not allowed: ${rejectedTypes}`);
+};
 
 
 const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -70,12 +77,14 @@ setFilePreviewUrl(URL.createObjectURL(file));
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'application/pdf': ['.pdf'],
-      'application/msword': ['.doc', '.docx'],
-      'application/vnd.ms-powerpoint': ['.ppt', '.pptx'],
-      'text/plain': ['.txt']
-    }
+    onDropRejected,
+  accept: {
+    'application/msword': ['.doc', '.docx'],
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+    'application/vnd.ms-powerpoint': ['.ppt', '.pptx'],
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+    'text/plain': ['.txt']
+  }
   });
 
   return (
@@ -84,9 +93,15 @@ setFilePreviewUrl(URL.createObjectURL(file));
       <div {...getRootProps()} className="border-2 border-dashed border-gray-300 p-4 rounded-md text-center cursor-pointer bg-gray-50 hover:bg-gray-100">
         <input {...getInputProps()} />
         {isDragActive ? (
+          <>
           <p>Drop the file here ...</p>
+         <div className='text-xs'>(Only .doc, .docx, .ppt, .pptx, and .txt files are accepted — PDFs not allowed)</div>
+          </>
         ) : (
+          <>
           <p>Drag & drop your document here, or click to select</p>
+  <div className='text-xs'>(Only .doc, .docx, .ppt, .pptx, and .txt files are accepted — PDFs not allowed)</div>
+          </>
         )}
       </div>
 {fileName && (

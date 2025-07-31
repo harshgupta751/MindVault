@@ -1282,7 +1282,7 @@ const renderDocumentLink = () => {
   rel="noopener noreferrer"
 >
   <p className="text-sm text-gray-700">
-    📄 {decodeURIComponent(content?.split('/').pop() || '')}
+     ⬇️ <span className='text-sm text-blue-500'>Download</span> {decodeURIComponent(content?.split('/').pop() || '')}
   </p>
 </a>
 

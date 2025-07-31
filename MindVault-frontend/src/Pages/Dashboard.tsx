@@ -630,7 +630,7 @@ const [type, setType] = useRecoilState(typeAtom)
 
 if(debouncedValue){
 //@ts-ignore
-filteredContent=filteredContent.filter((ele)=>ele.title.toLowerCase().includes(debouncedValue.toLowerCase()))
+filteredContent=filteredContent.filter((ele)=>ele.title.toLowerCase().includes(debouncedValue.toLowerCase()) || ele.subtitle?.toLowerCase()?.includes(debouncedValue.toLowerCase()))
 }
 if(activeMenuItem!='all' && activeMenuItem!='important'){
   //@ts-ignore

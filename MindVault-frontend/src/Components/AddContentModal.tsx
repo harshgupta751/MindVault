@@ -305,7 +305,7 @@
 
 // export default AddContentModal;
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FileText, Video, Link, Upload, Hash,X } from 'lucide-react';
 import Button from './Button';
 import DocumentUploader from './DocumentUploader';
@@ -517,7 +517,10 @@ toast.error("Error in adding occured. Please try again!")
 
         {/* Fixed Footer */}
         <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 flex-shrink-0">
-          <Button variant="secondary" onClick={onClose}>
+          <Button variant="secondary" onClick={()=>{
+            onClose()
+            setContent("")
+          }}>
             Cancel
           </Button>
           <Button variant="primary" onClick={()=>{
