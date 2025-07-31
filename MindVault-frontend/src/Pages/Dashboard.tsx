@@ -121,7 +121,7 @@ getContent()
 
   useEffect(()=>{
 if(hasInitializedAccessType){
-handleShareBrain()
+  handleShareBrain()
 }
 
   },[accessType])
