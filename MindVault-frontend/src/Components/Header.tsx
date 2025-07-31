@@ -65,8 +65,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ 
-  title = "All Notes", 
-  subtitle = "Your personal knowledge collection",
+  title = "MindVault", 
+  subtitle = "Your knowledge hub for notes, links, videos & documents",
   onShareBrain,
   onAddContent,
   onLogout

@@ -11,8 +11,8 @@ interface SharedHeaderProps {
 }
 
 const SharedHeader: React.FC<SharedHeaderProps> = ({ 
-  title = "All Notes", 
-  subtitle = "Shared knowledge collection",
+  title = "MindVault", 
+  subtitle = "Shared knowledge hub for notes, links, videos & documents",
   searchValue,
   setSearchValue
 }) => {
