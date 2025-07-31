@@ -1,8 +1,9 @@
 // Required dependencies
 // npm install react-dropzone
-
+// very final 
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+
 
 const DocumentUploader = ({ setContent }: { setContent: (url: string) => void }) => {
   const [fileName, setFileName] = useState<string>('');
@@ -17,7 +18,9 @@ useEffect(() => {
   };
 }, [filePreviewUrl]);
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+
+
+const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (!file) return;
 

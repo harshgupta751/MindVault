@@ -1,6 +1,53 @@
+// correct- 
+// import express from 'express';
+// import axios from 'axios';
+// import dotenv from 'dotenv';
+// dotenv.config();
+
+// const router = express.Router();
+
+// router.get('/document-proxy', async (req, res) => {
+//   const { publicId } = req.query;
+
+//   if (!publicId || typeof publicId !== 'string') {
+//     return res.status(400).send('Missing document publicId');
+//   }
+
+//   const decodedPublicId = decodeURIComponent(publicId);
+//   const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+
+//   const documentUrl = `https://res.cloudinary.com/${cloudName}/raw/upload/${decodedPublicId}`;
+
+//   console.log('Proxying from:', documentUrl);
+
+//   try {
+//     const response = await axios.get(documentUrl, {
+//       responseType: 'stream',
+//     });
+
+//     res.setHeader('Content-Type', response.headers['content-type']);
+//     res.setHeader(
+//       'Content-Disposition',
+//       `attachment; filename="${decodedPublicId.split('/').pop()}"`
+//     );
+
+//     // @ts-ignore
+//     response.data.pipe(res);
+//   } catch (err: any) {
+//     console.error('[Document Proxy Error]', err?.message || err);
+//     res.status(500).send('Failed to fetch or serve document');
+//   }
+// });
+
+// export default router;
+
+// routes/documentProxy.ts
+
 import express from 'express';
 import axios from 'axios';
-import { v2 as cloudinary } from 'cloudinary';
+import { Readable } from 'stream';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const router = express.Router();
 
@@ -8,34 +55,30 @@ router.get('/document-proxy', async (req, res) => {
   const { publicId } = req.query;
 
   if (!publicId || typeof publicId !== 'string') {
-    return res.status(400).send('Missing publicId');
+    return res.status(400).send('Missing document publicId');
   }
 
+  const decodedPublicId = decodeURIComponent(publicId);
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+
+  const documentUrl = `https://res.cloudinary.com/${cloudName}/raw/upload/${decodedPublicId}`;
+  console.log('Proxying from:', documentUrl);
+
   try {
-    const signedUrl = cloudinary.url(publicId, {
-      type: 'upload', // ❗ Try switching this to 'upload' or 'raw' depending on actual file type
-      resource_type: 'raw',
-      sign_url: true,
-      secure: true,
+    const response = await axios.get(documentUrl, {
+      responseType: 'stream',
     });
 
-    const headResponse = await axios.head(signedUrl);
-
-    const contentType = headResponse.headers['content-type'] || 'application/octet-stream';
-    const isPDF = contentType.includes('pdf');
-    const filename = publicId.split('/').pop() || 'document';
-
-    const fileResponse = await axios.get(signedUrl, { responseType: 'stream' });
-
-    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Type', response.headers['content-type']);
     res.setHeader(
       'Content-Disposition',
-      `${isPDF ? 'inline' : 'attachment'}; filename="${filename}"`
+      `attachment; filename="${decodedPublicId.split('/').pop()}"`
     );
-//@ts-ignore
-    fileResponse.data.pipe(res);
+
+    // @ts-ignore
+    response.data.pipe(res);
   } catch (err: any) {
-    console.error('Proxy error:', err?.response?.data || err?.message || err);
+    console.error('[Document Proxy Error]', err?.message || err);
     res.status(500).send('Failed to fetch or serve document');
   }
 });
