@@ -7,6 +7,8 @@ import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import { auth } from './middleware'
 import ogs from 'open-graph-scraper'
+import cloudinary from './utils/cloudinary'
+import {getPublicIdFromCloudinaryUrl} from './utils/getPublicId'
 import bodyParser from 'body-parser';
 import ogRouter from './og'
 import uploadRoutes from './routes/upload';
@@ -250,6 +252,28 @@ const allContent=await ContentModel.find({
 app.delete('/delete/:id',auth, async function(req,res){
 const contentId=req.params.id
 try{
+
+const response= await ContentModel.findOne({
+    _id: contentId,
+    //@ts-ignore
+    userId: new ObjectId(req.id)
+})
+
+if(!response){
+    res.status(404).json({
+        error: "Content not found!"
+    })
+    return
+}
+
+if(response.type=='document' && response.content){
+const url= response.content
+const publicId= getPublicIdFromCloudinaryUrl(url);
+   if (publicId) {
+          await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
+        }
+}
+
 await ContentModel.deleteOne({
     _id: contentId,
     //@ts-ignore
@@ -265,9 +289,6 @@ res.json({
 })   
 
 }
-
-
-
 
 })
 

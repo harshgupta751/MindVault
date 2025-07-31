@@ -19,6 +19,8 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const middleware_1 = require("./middleware");
+const cloudinary_1 = __importDefault(require("./utils/cloudinary"));
+const getPublicId_1 = require("./utils/getPublicId");
 const body_parser_1 = __importDefault(require("body-parser"));
 const og_1 = __importDefault(require("./og"));
 const upload_1 = __importDefault(require("./routes/upload"));
@@ -243,6 +245,26 @@ app.delete('/delete/:id', middleware_1.auth, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const contentId = req.params.id;
         try {
+            const response = yield db_1.ContentModel.findOne({
+                _id: contentId,
+                //@ts-ignore
+                userId: new db_1.ObjectId(req.id)
+            });
+            if (!response) {
+                res.status(404).json({
+                    error: "Content not found!"
+                });
+                return;
+            }
+            if (response.type == 'document' && response.content) {
+                const url = response.content;
+                const publicId = (0, getPublicId_1.getPublicIdFromCloudinaryUrl)(url);
+                console.log("Extracted publicId:", publicId);
+                if (publicId) {
+                    console.log('🔥 Deleting Cloudinary file with publicId:', publicId);
+                    yield cloudinary_1.default.uploader.destroy(publicId, { resource_type: 'raw' });
+                }
+            }
             yield db_1.ContentModel.deleteOne({
                 _id: contentId,
                 //@ts-ignore
