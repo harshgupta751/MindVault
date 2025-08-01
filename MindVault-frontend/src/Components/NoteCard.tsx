@@ -12,6 +12,7 @@ import {
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import Button from './Button';
 
+
 interface NoteCardProps {
   type: 'note' | 'video' | 'link' | 'document';
   title: string;

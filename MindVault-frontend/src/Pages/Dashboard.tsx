@@ -145,11 +145,13 @@ if(hasInitializedAccessType){
   },[accessType])
 
   const handleDeleteNote = async (noteId: string) => {
+    const toastId= toast.loading("Deleting...")
     try{
    await axiosInstance.delete(`/delete/${noteId}`)
   getContent()
+  toast.success("Deleted successfully!", {id: toastId})
     }catch(e){
-        toast.error("Error occured. Please try again!")
+        toast.error("Error occured. Please try again!", {id: toastId})
     }
   };
 
