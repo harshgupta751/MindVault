@@ -50,7 +50,7 @@
 
 
 import React from 'react';
-import { Share, Plus, Search, LogOut } from 'lucide-react';
+import { Share, Plus, Search, LogOut, Brain } from 'lucide-react';
 import Button from './Button';
 import { useRecoilState } from 'recoil';
 import { inputAtom } from '../store/atoms';
@@ -141,6 +141,7 @@ const [searchQuery, setSearchQuery] = useRecoilState(inputAtom)
         </div>
       </div>
     </div>
+
   );
 };
 
