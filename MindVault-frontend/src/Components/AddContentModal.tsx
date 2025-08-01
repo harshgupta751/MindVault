@@ -20,6 +20,7 @@ const [subtitle, setSubtitle] = useState("");
 
 //@ts-ignore
 const tagRef= useRef<HTMLInputElement>()
+const [uploadedDocId, setUploadedDocId] = useState("");
 
 
   if (!isOpen) return null;
@@ -103,9 +104,21 @@ toast.error("Error in adding occured. Please try again!")
         <div className="flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0">
           <h2 className="text-xl font-semibold text-gray-900">Add Content</h2>
           <button
-            onClick={()=>{
+            onClick={async ()=>{
+
+                  if(type=='document' && uploadedDocId){
+              try{
+                await axiosInstance.post('/deletepublicid',{
+                  publicId: uploadedDocId
+                })
+              }catch(e){
+                console.error('Failed to delete uploaded file', e);
+              }
+            }
+
               onClose()
               setContent("")
+              setUploadedDocId("")
             }}
             className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
           >
@@ -175,7 +188,7 @@ toast.error("Error in adding occured. Please try again!")
     Content or URL
   </label>
   {type === 'document' ? (
-    <DocumentUploader setContent={setContent} />
+    <DocumentUploader setContent={setContent} setUploadedDocId={setUploadedDocId} />
   ) : (
     <textarea
       value={content}
@@ -212,9 +225,21 @@ toast.error("Error in adding occured. Please try again!")
 
         {/* Fixed Footer */}
         <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 flex-shrink-0">
-          <Button variant="secondary" onClick={()=>{
+          <Button variant="secondary" onClick={async ()=>{
+
+            if(type=='document' && uploadedDocId){
+              try{
+                await axiosInstance.post('/deletepublicid',{
+                  publicId: uploadedDocId
+                })
+              }catch(e){
+                console.error('Failed to delete uploaded file', e);
+              }
+            }
+
             onClose()
             setContent("")
+            setUploadedDocId("")
           }}>
             Cancel
           </Button>

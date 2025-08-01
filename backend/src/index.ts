@@ -412,6 +412,22 @@ res.json({
 
 })
 
+app.post('/deletepublicid', auth, async function(req, res){
+  const { publicId } = req.body;
+
+  if (!publicId) {
+    return res.status(400).json({ error: 'Missing publicId' });
+  }
+
+  try {
+    await cloudinary.uploader.destroy(publicId, { resource_type: "raw" });
+    return res.status(200).json({ message: 'Deleted successfully' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Deletion failed' });
+  }
+
+})
+
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', uploadRoutes);
 app.use('/api', documentProxyRoutes);

@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import {toast} from 'react-hot-toast'
 
-const DocumentUploader = ({ setContent }: { setContent: (url: string) => void; }) => {
+const DocumentUploader = ({ setContent, setUploadedDocId }: { setContent: (url: string) => void; setUploadedDocId: (url: string)=> void; }) => {
   const [fileName, setFileName] = useState<string>('');
   const [uploading, setUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
@@ -57,6 +57,7 @@ setFilePreviewUrl(URL.createObjectURL(file));
         if (xhr.status === 200) {
           const data = JSON.parse(xhr.responseText);
           setContent(data.publicId);
+          setUploadedDocId(data.publicId)
         } else {
           alert('Upload failed');
         }
