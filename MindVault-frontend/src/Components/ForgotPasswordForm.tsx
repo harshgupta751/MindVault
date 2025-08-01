@@ -31,16 +31,15 @@ const response= await axiosInstance.post('/resetpassword', {
   email
 })
 
-if(response.status==404){
-  toast.error("Email not found!")
-  return
-}
-if(response.status==200){
   toast.success( "Reset link sent to your email")
     setIsSubmitted(true);
-}
-  }catch(e){
+
+  }catch(error:any){
+    if(error.response?.status==404){
+  toast.error("Email not found!")
+}else{
     toast.error("Error occured. Please try again!")
+}
   }
 }
 
