@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import Header from '../components/Header';
-import NoteGrid from '../components/NoteGrid';
-import AddContentModal from '../components/AddContentModal';
-import ShareableLinkModal from '../components/ShareableLinkModal';
+import Sidebar from '../Components/Sidebar';
+import Header from '../Components/Header';
+import NoteGrid from '../Components/NoteGrid';
+import AddContentModal from '../Components/AddContentModal';
+import ShareableLinkModal from '../Components/ShareableLinkModal';
 import { useNavigate } from 'react-router-dom';
 import {toast} from 'react-hot-toast'
 import axiosInstance from '../api/axiosInstance';

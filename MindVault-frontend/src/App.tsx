@@ -2,10 +2,10 @@ import {Routes, Route} from 'react-router-dom'
 import {Dashboard} from './Pages/Dashboard'
 import { SignUp } from './Pages/SignUp'
 import { SignIn } from './Pages/SignIn'
-import { ForgotPasswordForm } from './components/ForgotPasswordForm'
-import { ResetPasswordForm } from './components/ResetPasswordForm'
+import { ForgotPasswordForm } from './Components/ForgotPasswordForm'
+import { ResetPasswordForm } from './Components/ResetPasswordForm'
 import { Toaster } from 'react-hot-toast'
-import { SharedDashboard } from './components/SharedDashboard'
+import { SharedDashboard } from './Components/SharedDashboard'
 
 
 
