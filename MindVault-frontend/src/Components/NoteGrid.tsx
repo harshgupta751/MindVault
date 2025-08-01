@@ -40,7 +40,6 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes, toggleImportant, onDeleteNot
       {notes.map((note) => (
         <NoteCard
           key={note._id}
-          id={note._id}
           type={note.type}
           title={note.title}
           subtitle={note.subtitle}
