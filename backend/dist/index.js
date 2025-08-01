@@ -259,9 +259,7 @@ app.delete('/delete/:id', middleware_1.auth, function (req, res) {
             if (response.type == 'document' && response.content) {
                 const url = response.content;
                 const publicId = (0, getPublicId_1.getPublicIdFromCloudinaryUrl)(url);
-                console.log("Extracted publicId:", publicId);
                 if (publicId) {
-                    console.log('🔥 Deleting Cloudinary file with publicId:', publicId);
                     yield cloudinary_1.default.uploader.destroy(publicId, { resource_type: 'raw' });
                 }
             }

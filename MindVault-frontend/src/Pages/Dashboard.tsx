@@ -84,14 +84,16 @@ return function(){
     const response= await axiosInstance.get('/sharemode')
         if(response.status===403){
           toast.error("Error occured. Please refresh the page!")
+          return
         }
-        else if(response.data.shareOn===true){
+        if(response.data.shareOn===true){
           setAccessType('public')
           setHasInitializedAccessType(true)
         }else if(response.data.shareOn===false){
           setAccessType('restricted')
           setHasInitializedAccessType(true)
         }
+        handleShareBrain()
     }catch(e){
       toast.error("Error occured. Please refresh the page!")
     }
