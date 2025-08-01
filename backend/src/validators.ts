@@ -1,4 +1,4 @@
-import {z, ZodArray} from 'zod'
+import { z } from 'zod'
 
 export const signUpSchema= z.object({
 email: z.string().email({message: "Enter valid email!"}),
@@ -18,8 +18,6 @@ title:z.string(),
 subtitle: z.string().optional()
 })
 
-export const TagZod= z.object({
-tag: z.string(),
-})
+
 
 

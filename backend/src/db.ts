@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import { required } from 'zod/v4/core/util.cjs'
 const Schema= mongoose.Schema
 export const ObjectId= mongoose.Types.ObjectId
 import dotenv from 'dotenv'
@@ -24,9 +23,6 @@ userId: {type:ObjectId, required: true,ref: 'Users'}
     timestamps: true
 })
 
-const TagSchema= new Schema({
-tag: {type:String, required: true}
-})
 
 const LinkSchema= new Schema({
     hash: {type: String, required: true, unique: true},
@@ -35,6 +31,5 @@ const LinkSchema= new Schema({
 
 export const UserModel= mongoose.model('Users',UserSchema)
 export const ContentModel= mongoose.model('Contents',ContentSchema)
-export const TagModel= mongoose.model('Tags',TagSchema)
 export const LinkModel= mongoose.model('Links',LinkSchema)
 

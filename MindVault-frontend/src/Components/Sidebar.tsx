@@ -1,5 +1,5 @@
 import React from 'react';
-import { Brain,NotebookText, Play, FileText, Link, Hash, LayoutGrid, Star } from 'lucide-react';
+import { Brain,NotebookText, Play, FileText, Link, LayoutGrid, Star } from 'lucide-react';
 
 interface SidebarProps {
   activeItem?: string;

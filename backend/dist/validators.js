@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TagZod = exports.createSchema = exports.signInSchema = exports.signUpSchema = void 0;
+exports.createSchema = exports.signInSchema = exports.signUpSchema = void 0;
 const zod_1 = require("zod");
 exports.signUpSchema = zod_1.z.object({
     email: zod_1.z.string().email({ message: "Enter valid email!" }),
@@ -16,7 +16,4 @@ exports.createSchema = zod_1.z.object({
     type: zod_1.z.string(),
     title: zod_1.z.string(),
     subtitle: zod_1.z.string().optional()
-});
-exports.TagZod = zod_1.z.object({
-    tag: zod_1.z.string(),
 });

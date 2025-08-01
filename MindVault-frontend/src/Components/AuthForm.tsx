@@ -4,7 +4,6 @@ import Button from './Button';
 import {z} from 'zod';
 import axiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
-import type { id } from 'zod/locales';
 import toast from 'react-hot-toast';
 
 

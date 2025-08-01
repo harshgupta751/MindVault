@@ -17,8 +17,6 @@ export const Dashboard = () => {
   const navigate = useNavigate()
 const headerRef = useRef<HTMLDivElement>(null);
 const [headerHeight, setHeaderHeight] = useState(0);
-
-  // Sharable Link Modal State
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [shareData, setShareData] = useState({
     link: '',
@@ -113,9 +111,9 @@ useEffect(() => {
     }
   };
 
-  updateHeight(); // Initial call
+  updateHeight(); 
 
-  window.addEventListener("resize", updateHeight); // Recalculate on resize
+  window.addEventListener("resize", updateHeight); 
 
   return () => window.removeEventListener("resize", updateHeight);
 }, []);
@@ -164,7 +162,7 @@ try{
 const response= await axiosInstance.post(`/share/settings/${accessType==='public'}`);
 if(accessType==='public'){
     setShareData({
-      link: `http://localhost:5173${response.data.sharableId}`,
+      link: `${import.meta.env.CLIENT_URL}${response.data.sharableId}`,
       isCopied: false
     });
   }else{
@@ -205,7 +203,7 @@ if(accessType==='public'){
       setShareData(prev => ({ ...prev, isCopied: true }));
       toast.success('Link copied to clipboard!');
       
-      // Reset the copied state after 2 seconds
+     
       setTimeout(() => {
         setShareData(prev => ({ ...prev, isCopied: false }));
       }, 2000);
@@ -216,7 +214,7 @@ if(accessType==='public'){
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Fixed Sidebar */}
+    
       <div className="fixed top-0 left-0 bottom-0 w-64">
         <Sidebar 
           activeItem={activeMenuItem}
@@ -224,9 +222,9 @@ if(accessType==='public'){
         />
       </div>
       
-      {/* Main Content Area */}
+    
       <div className="flex-1 flex flex-col ml-64">
-        {/* Fixed Header with higher z-index */}
+      
         <div className="fixed top-0 right-0 left-64 z-30 bg-white shadow-sm" ref={headerRef}>
           <Header 
             onShareBrain={()=>setIsShareModalOpen(true)}
@@ -235,7 +233,7 @@ if(accessType==='public'){
           />
         </div>
         
-        {/* Scrollable Content with proper top padding */}
+       
         <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto"
   style={{ paddingTop: `${headerHeight}px` }}>
           <NoteGrid
@@ -246,7 +244,7 @@ if(accessType==='public'){
         </main>
       </div>
       
-      {/* Modals */}
+    
       <AddContentModal 
         isOpen={isAddContentModalOpen}
         onClose={handleCloseAddContentModal}

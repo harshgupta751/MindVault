@@ -207,7 +207,7 @@ const renderDocumentLink = () => {
       <div className="w-full rounded-md border border-gray-100 bg-gray-50 p-3 flex items-center gap-2 mb-3">
         <File className="w-5 h-5 text-gray-600" />
 <a
- href={`http://localhost:3000/api/document-proxy?publicId=${encodeURIComponent(content!)}`}
+ href={`${import.meta.env.VITE_API_URL}/api/document-proxy?publicId=${encodeURIComponent(content!)}`}
   target="_blank"
   rel="noopener noreferrer"
 >

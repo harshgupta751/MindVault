@@ -31,7 +31,7 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: ['http://localhost:5173'],
+    origin: [process.env.CLIENT_URL],
     credentials: true
 }));
 app.use(express_1.default.json());
@@ -133,7 +133,7 @@ app.post('/resetpassword', function (req, res) {
             const token = jsonwebtoken_1.default.sign({
                 userId: findUser._id
             }, process.env.RESET_SECRET, { expiresIn: '15m' });
-            const resetLink = `http://localhost:5173/resetpassword?token=${token}`;
+            const resetLink = `${process.env.CLIENT_URL}/resetpassword?token=${token}`;
             const transporter = nodemailer_1.default.createTransport({
                 service: 'gmail',
                 auth: {
@@ -393,6 +393,21 @@ app.post('/toggleimportant', middleware_1.auth, function (req, res) {
             res.status(403).json({
                 error: "Error occured. Please try again!"
             });
+        }
+    });
+});
+app.post('/deletepublicid', middleware_1.auth, function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { publicId } = req.body;
+        if (!publicId) {
+            return res.status(400).json({ error: 'Missing publicId' });
+        }
+        try {
+            yield cloudinary_1.default.uploader.destroy(publicId, { resource_type: "raw" });
+            return res.status(200).json({ message: 'Deleted successfully' });
+        }
+        catch (err) {
+            return res.status(500).json({ error: 'Deletion failed' });
         }
     });
 });

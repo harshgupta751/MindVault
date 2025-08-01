@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FileText, Video, Link, Upload, Hash,X } from 'lucide-react';
 import Button from './Button';
 import DocumentUploader from './DocumentUploader';
@@ -126,7 +126,6 @@ toast.error("Error in adding occured. Please try again!")
           </button>
         </div>
 
-        {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-6">
             <p className="text-gray-600 mb-6">Choose the type of content you want to add to your MindVault</p>
@@ -223,7 +222,6 @@ toast.error("Error in adding occured. Please try again!")
           </div>
         </div>
 
-        {/* Fixed Footer */}
         <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 flex-shrink-0">
           <Button variant="secondary" onClick={async ()=>{
 

@@ -21,13 +21,12 @@ const router = express_1.default.Router();
 const storage = new multer_storage_cloudinary_1.CloudinaryStorage({
     cloudinary: cloudinary_1.default,
     params: (req, file) => __awaiter(void 0, void 0, void 0, function* () {
-        const ext = path_1.default.extname(file.originalname); // .pdf, .docx
+        const ext = path_1.default.extname(file.originalname);
         const name = path_1.default.parse(file.originalname).name.replace(/[^a-zA-Z0-9-_]/g, '-');
         return {
             folder: 'mindvault-documents',
             resource_type: 'raw',
-            // public_id: `${name}${ext}`, // keep extension
-            public_id: `${name}${ext}`, // ✅ This includes .pdf or .docx
+            public_id: `${name}${ext}`,
         };
     }),
 });
@@ -43,7 +42,6 @@ router.post('/upload', upload.single('file'), (req, res) => __awaiter(void 0, vo
         res.json({ url: fileUrl, publicId });
     }
     catch (err) {
-        console.error(err);
         res.status(500).json({ error: 'Upload failed' });
     }
 }));

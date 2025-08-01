@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import Sidebar from './Sidebar';
 import SharedHeader from './SharedHeader';
@@ -24,9 +23,9 @@ useEffect(() => {
     }
   };
 
-  updateHeight(); // Initial call
+  updateHeight(); 
 
-  window.addEventListener("resize", updateHeight); // Recalculate on resize
+  window.addEventListener("resize", updateHeight); 
 
   return () => window.removeEventListener("resize", updateHeight);
 }, []);
@@ -90,7 +89,7 @@ return function(){
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Fixed Sidebar */}
+    
       <div className="fixed top-0 left-0 bottom-0 w-64">
         <Sidebar 
           activeItem={activeMenuItem}
@@ -98,9 +97,9 @@ return function(){
         />
       </div>
       
-      {/* Main Content Area */}
+  
       <div className="flex-1 flex flex-col ml-64">
-        {/* Fixed Header with higher z-index */}
+  
         <div className="fixed top-0 right-0 left-64 z-30 bg-white shadow-sm" ref={headerRef}>
           <SharedHeader 
           //@ts-ignore
@@ -109,7 +108,7 @@ return function(){
           />
         </div>
         
-        {/* Scrollable Content with proper top padding */}
+      
         <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto"
   style={{ paddingTop: `${headerHeight}px` }}>
           <NoteGrid

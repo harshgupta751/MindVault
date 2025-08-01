@@ -9,14 +9,13 @@ const router = express.Router();
 const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
-    const ext = path.extname(file.originalname); // .pdf, .docx
+    const ext = path.extname(file.originalname); 
     const name = path.parse(file.originalname).name.replace(/[^a-zA-Z0-9-_]/g, '-');
 
     return {
       folder: 'mindvault-documents',
       resource_type: 'raw',
-      // public_id: `${name}${ext}`, // keep extension
-     public_id: `${name}${ext}`, // ✅ This includes .pdf or .docx
+     public_id: `${name}${ext}`, 
 
     };
   },
@@ -35,7 +34,6 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 
     res.json({ url: fileUrl, publicId });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: 'Upload failed' });
   }
 });

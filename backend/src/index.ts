@@ -1,12 +1,10 @@
-import express, { response } from 'express'
-import { boolean, success } from 'zod'
+import express from 'express'
 import {createSchema, signInSchema, signUpSchema} from './validators' 
 import { ContentModel, LinkModel, UserModel,ObjectId } from './db'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import { auth } from './middleware'
-import ogs from 'open-graph-scraper'
 import cloudinary from './utils/cloudinary'
 import {getPublicIdFromCloudinaryUrl} from './utils/getPublicId'
 import bodyParser from 'body-parser';
@@ -16,13 +14,12 @@ import documentProxyRoutes from './routes/documentProxy';
 import {nanoid} from 'nanoid'
 import cors from 'cors'
 import nodemailer from 'nodemailer'
-import { error } from 'console'
 
 dotenv.config()
 
 const app= express()
 app.use(cors({
-    origin: ['http://localhost:5173'] ,
+    origin: [process.env.CLIENT_URL as string] ,
     credentials: true
 }))
 
@@ -129,7 +126,7 @@ return
 const token= jwt.sign({
     userId: findUser._id
 }, process.env.RESET_SECRET as string, {expiresIn: '15m'} )
-const resetLink= `http://localhost:5173/resetpassword?token=${token}`
+const resetLink= `${process.env.CLIENT_URL}/resetpassword?token=${token}`
 
 const transporter= nodemailer.createTransport({
     service: 'gmail',

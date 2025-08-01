@@ -48,7 +48,7 @@ if(response.status==200){
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          {/* Header */}
+      
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-3 mb-6">
               <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
@@ -58,7 +58,7 @@ if(response.status==200){
             </div>
           </div>
 
-          {/* Success Message */}
+       
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-8 h-8 text-green-600" />
@@ -103,7 +103,7 @@ if(response.status==200){
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
+     
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
@@ -120,10 +120,10 @@ if(response.status==200){
           </p>
         </div>
 
-        {/* Forgot Password Form */}
+ 
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email Field */}
+         
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
@@ -144,7 +144,6 @@ if(response.status==200){
               </div>
             </div>
 
-            {/* Submit Button */}
             <Button
               variant="primary"
               className="w-full py-3 text-base font-medium"
@@ -153,7 +152,6 @@ if(response.status==200){
             </Button>
           </form>
 
-          {/* Back to Login */}
           <div className="mt-6 pt-6 border-t border-gray-200">
             <Button
               variant="ghost"
@@ -166,7 +164,6 @@ if(response.status==200){
           </div>
         </div>
 
-        {/* Help Text */}
   
       </div>
     </div>
