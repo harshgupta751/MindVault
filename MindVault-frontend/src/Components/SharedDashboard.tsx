@@ -86,6 +86,9 @@ if(activeMenuItem=='important'){
 filteredContent= filteredContent.filter((ele)=> ele.isImportant)
 }
 
+//@ts-ignore
+filteredContent.sort((note1, note2)=> new Date(note2.createdAt) - new Date(note1.createdAt))
+
 setFilteredNotes(filteredContent)
 return function(){
   setFilteredNotes([])
