@@ -29,12 +29,11 @@ async function handleContentSubmission(){
 if(!content || !type || !title){
 toast.error("Fill all the required details!")
 }else{
-  //@ts-ignore
 let temp=[];
 if(tagRef.current.value!=""){
  temp= tagRef.current?.value.split(",").map((tag:any)=>tag.trim()) ;
 }
-//@ts-ignore
+const toastId= toast.loading("Adding...")
 try{
 await axiosInstance.post('/create', {
 content,
@@ -43,6 +42,7 @@ title,
 subtitle,
 tags: temp
 })
+toast.success("Added successfully!", {id: toastId})
 setContent("")
 setTitle("");
 setType("");
@@ -52,7 +52,7 @@ setSubtitle("");
 
 }
 catch(e){
-toast.error("Error in adding occured. Please try again!")
+toast.error("Error in adding occured. Please try again!", {id: toastId})
 }
 
 }

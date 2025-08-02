@@ -122,6 +122,7 @@ useEffect(() => {
 
   const handleToggleImportant =async  (noteId: string, isImportant: boolean) => {
     try{
+      toast.success("Loading...")
    await axiosInstance.post('/toggleimportant',{
     contentId: noteId,
     isImportant: isImportant
