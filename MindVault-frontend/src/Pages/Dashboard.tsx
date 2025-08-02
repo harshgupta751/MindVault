@@ -121,16 +121,17 @@ useEffect(() => {
 
 
   const handleToggleImportant =async  (noteId: string, isImportant: boolean) => {
+    const toastId= toast.loading("Updating...")
     try{
-      toast.success("Loading...")
    await axiosInstance.post('/toggleimportant',{
     contentId: noteId,
     isImportant: isImportant
    })
+   toast.success("Updated successfully!", {id: toastId})
 getContent()
 
   }catch(e){
-    toast.error("Error occured. Please try again!")
+    toast.error("Error occured. Please try again!", {id: toastId})
   }
 
   };
