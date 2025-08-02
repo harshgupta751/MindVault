@@ -42,14 +42,13 @@ title,
 subtitle,
 tags: temp
 })
-toast.success("Added successfully!", {id: toastId})
 setContent("")
 setTitle("");
 setType("");
 
 tagRef.current.value="";
 setSubtitle("");
-
+toast.success("Added successfully!", {id: toastId})
 }
 catch(e){
 toast.error("Error in adding occured. Please try again!", {id: toastId})

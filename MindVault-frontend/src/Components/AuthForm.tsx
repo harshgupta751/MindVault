@@ -107,6 +107,8 @@ if(!password){
   toast.error("Password is required!");
   return
 }
+
+const toastId= toast.loading("Signing In...")
 try{
 const response= await axiosInstance.post('/signin',{
   email,
@@ -117,16 +119,17 @@ if(response.data.token){
    //@ts-ignore
 localStorage.setItem("token",response.data.token)
 navigate('/dashboard')
+toast.success("You are Logged In!", {id: toastId})
 
 }else if(response.data.message=="User does not exist!"){
    //@ts-ignore
-   toast.error("User does not exist!")
+   toast.error("User does not exist!", {id:toastId})
 }
 else if(response.data.message=="Wrong Password!"){
-    toast.error("Wrong Password!")
+    toast.error("Wrong Password!", {id: toastId})
 }
 }catch(e){
-  toast.error("Error occured. Please try again!")
+  toast.error("Error occured. Please try again!", {id: toastId})
 }
 
 }

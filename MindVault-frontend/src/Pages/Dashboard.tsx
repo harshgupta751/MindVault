@@ -127,8 +127,8 @@ useEffect(() => {
     contentId: noteId,
     isImportant: isImportant
    })
-   toast.success("Updated successfully!", {id: toastId})
 getContent()
+ toast.success("Updated successfully!", {id: toastId})
 
   }catch(e){
     toast.error("Error occured. Please try again!", {id: toastId})
