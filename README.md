@@ -7,15 +7,15 @@
 
 ## 🚀 Features
 
-- 🔐 **User Authentication** – Sign up, Sign in, Forgot Password feature using nodemailer
-- 📂 **Content Types** – Save Notes, Documents (with upload), Links, and Videos (with thumbnails)
-- 📌 **Mark as Important** – Star important content to quickly find it later
-- 🔍 **Search & Filter** – Real-time search and content filtering by type or on basis of Important tag
-- 🎨 **Responsive UI** – Fully mobile-first design with Tailwind CSS
-- 📤 **Share Brain** – Publicly share your knowledge base via a unique shareable link
-- 🔒 **Protected Routes** – Unauthorized users are redirected to login
-- 📄 **Open Graph Previews** – YouTube thumbnails on saved links
-- ☁️ **Cloud Storage** – Document uploads handled with Cloudinary
+- 🔐 **User Authentication** - Sign up, Sign in, Forgot Password feature using nodemailer
+- 📂 **Content Types** - Save Notes, Documents (with upload), Links, and Videos (with thumbnails)
+- 📌 **Mark as Important** - Star important content to quickly find it later
+- 🔍 **Search & Filter** - Real-time search and content filtering by type or on basis of Important tag
+- 🎨 **Responsive UI** - Fully mobile-first design with Tailwind CSS
+- 📤 **Share Brain** - Publicly share your knowledge base via a unique shareable link
+- 🔒 **Protected Routes** - Unauthorized users are redirected to login
+- 📄 **Open Graph Previews** - YouTube thumbnails on saved links
+- ☁️ **Cloud Storage** - Document uploads handled with Cloudinary
 
 ---
 
