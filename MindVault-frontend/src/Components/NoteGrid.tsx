@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import NoteCard from './NoteCard';
 
 interface Note {
@@ -20,6 +20,16 @@ interface NoteGridProps {
 }
 
 const NoteGrid: React.FC<NoteGridProps> = ({ notes, toggleImportant, onDeleteNote }) => {
+
+const endListRef= useRef<HTMLDivElement>(null)
+
+useEffect(()=>{
+if(endListRef.current){
+  endListRef.current.scrollIntoView({behavior: 'smooth'})
+}
+
+},[notes.length])
+
   return (
     <>
     {notes.length==0?
@@ -52,6 +62,7 @@ const NoteGrid: React.FC<NoteGridProps> = ({ notes, toggleImportant, onDeleteNot
           onDelete={onDeleteNote? () => onDeleteNote(note._id) : undefined}
         />
       ))}
+      <div ref={endListRef}></div>
     </div>
 )
     }
