@@ -6,6 +6,7 @@ import { ForgotPasswordForm } from './Components/ForgotPasswordForm'
 import { ResetPasswordForm } from './Components/ResetPasswordForm'
 import { Toaster } from 'react-hot-toast'
 import { SharedDashboard } from './Components/SharedDashboard'
+import NotFound from './Pages/NotFound'
 
 
 
@@ -22,6 +23,7 @@ function App() {
          <Route path='/resetpassword' element={<ResetPasswordForm/>}></Route>
         <Route path='/dashboard' element={<Dashboard/>}></Route>
         <Route path='/share' element={<SharedDashboard/>}></Route>
+        <Route path='*' element={<NotFound/>}></Route>
       </Routes>
     </>
   )

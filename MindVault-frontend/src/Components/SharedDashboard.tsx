@@ -6,6 +6,7 @@ import {toast} from 'react-hot-toast'
 import axiosInstance from '../api/axiosInstance';
 import useDebounce from '../hooks/useDebounce';
 import { useSearchParams } from 'react-router-dom';
+import NoteSkeletonGrid from './NoteSkeletonGrid';
 
 export const SharedDashboard = () => {
   const [notes, setNotes] = useState([])
@@ -14,6 +15,19 @@ export const SharedDashboard = () => {
 const [headerHeight, setHeaderHeight] = useState(0);
 const [searchParams] = useSearchParams()
 const id= searchParams.get('id')
+const [isMounting, setIsMounting] = useState(true)
+
+  useEffect(()=>{
+    const timer= setTimeout(()=>{
+        setIsMounting(false)
+    },1000)
+  
+
+return function(){
+clearTimeout(timer)
+}
+
+  },[])
 
 
 useEffect(() => {
@@ -111,10 +125,14 @@ return function(){
       
         <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto"
   style={{ paddingTop: `${headerHeight}px` }}>
+    {isMounting? (
+       <NoteSkeletonGrid />
+    ) : (
           <NoteGrid
             notes={filteredNotes}
              toggleImportant={handleToggleImportant}
           />
+    )}
         </main>
       </div>
     </div>

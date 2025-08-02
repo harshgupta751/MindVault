@@ -68,9 +68,9 @@ const response= await axiosInstance.post('/signup',{
   name,
   password
 })
- //@ts-ignore
+
 if(response.data.message==="User already exists!"){
-   //@ts-ignore
+
    toast.error("User already exists!", {id: toastId})
   return
 }else{
@@ -114,15 +114,15 @@ const response= await axiosInstance.post('/signin',{
   email,
   password
 })
- //@ts-ignore
+
 if(response.data.token){
-   //@ts-ignore
+ 
 localStorage.setItem("token",response.data.token)
 navigate('/dashboard')
 toast.success("You are Logged In!", {id: toastId})
 
 }else if(response.data.message=="User does not exist!"){
-   //@ts-ignore
+
    toast.error("User does not exist!", {id:toastId})
 }
 else if(response.data.message=="Wrong Password!"){

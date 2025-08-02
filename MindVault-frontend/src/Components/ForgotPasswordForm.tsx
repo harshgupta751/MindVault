@@ -25,20 +25,20 @@ if(!result.success){
   toast.error("Enter valid email!")
   return
 }
-
+const toastId= toast.loading("Sending reset link...")
   try{
 const response= await axiosInstance.post('/resetpassword', {
   email
 })
 
-  toast.success( "Reset link sent to your email")
+  toast.success( "Reset link sent to your email", {id: toastId})
     setIsSubmitted(true);
 
   }catch(error:any){
     if(error.response?.status==404){
-  toast.error("Email not found!")
+  toast.error("Email not found!", {id: toastId})
 }else{
-    toast.error("Error occured. Please try again!")
+    toast.error("Error occured. Please try again!", {id: toastId})
 }
   }
 }

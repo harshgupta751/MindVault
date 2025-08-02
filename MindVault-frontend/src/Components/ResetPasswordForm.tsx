@@ -35,21 +35,24 @@ if(password!=confirmPassword){
     toast.error("Passwords do not match")
      return
 }
+
+const toastId= toast.loading("Resetting password...")
 try{
- 
 const response= await axiosInstance.post('/createnewpassword',{
     token,
     password
 })
-if(response.status==400){
-    toast.error("Link is expired!");
-    setTimeout(()=>{navigate('/forgotpassword')},2000)
-    return
-}
+
+toast.success("Password reset successfull!", {id: toastId})
 setIsSubmitted(true)
 
-}catch(e){
-   toast.error("Error occured. Please try again!")
+}catch(error:any){
+  if(error.response?.status==400){
+    toast.error("Link is expired!", {id: toastId});
+    setTimeout(()=>{navigate('/forgotpassword')},2000)
+}else{
+   toast.error("Error occured. Please try again!", {id: toastId})
+}
 }
 
 

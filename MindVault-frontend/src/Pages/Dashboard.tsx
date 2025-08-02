@@ -4,6 +4,7 @@ import Header from '../Components/Header';
 import NoteGrid from '../Components/NoteGrid';
 import AddContentModal from '../Components/AddContentModal';
 import ShareableLinkModal from '../Components/ShareableLinkModal';
+import NoteSkeletonGrid from '../Components/NoteSkeletonGrid';
 import { useNavigate } from 'react-router-dom';
 import {toast} from 'react-hot-toast'
 import axiosInstance from '../api/axiosInstance';
@@ -24,6 +25,19 @@ const [headerHeight, setHeaderHeight] = useState(0);
   });
 
   const [hasInitializedAccessType, setHasInitializedAccessType] = useState(false) 
+  const [isMounting, setIsMounting] = useState(true)
+
+  useEffect(()=>{
+    const timer= setTimeout(()=>{
+        setIsMounting(false)
+    },1000)
+  
+
+return function(){
+clearTimeout(timer)
+}
+
+  },[])
 
   async function getContent() {
     try {
@@ -214,6 +228,7 @@ if(accessType==='public'){
     });
   };
 
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
     
@@ -238,11 +253,15 @@ if(accessType==='public'){
        
         <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto"
   style={{ paddingTop: `${headerHeight}px` }}>
+    {isMounting? (
+      <NoteSkeletonGrid />
+    ) : (
           <NoteGrid
             notes={filteredNotes}
             toggleImportant={handleToggleImportant}
             onDeleteNote={handleDeleteNote}
           />
+    )}
         </main>
       </div>
       
