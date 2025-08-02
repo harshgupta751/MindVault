@@ -234,9 +234,9 @@ const renderDocumentLink = () => {
         <div className="flex items-center gap-1">
           <button onClick={onToggleImportant} className="p-2 rounded-full cursor-pointer">
             {isImportant ? (
-              <FaStar className="text-yellow-500 text-xl" />
+              <FaStar title='Unmark Important' className="text-yellow-500 text-xl" />
             ) : (
-              <FaRegStar className="text-gray-400 hover:text-yellow-500 text-xl" />
+              <FaRegStar title='Mark Important' className="text-gray-400 hover:text-yellow-500 text-xl" />
             )}
           </button>
           {onDelete && (

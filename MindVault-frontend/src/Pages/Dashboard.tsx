@@ -260,7 +260,3 @@ if(accessType==='public'){
     </div>
   );
 };
-
-
-
-

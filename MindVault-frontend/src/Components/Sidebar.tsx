@@ -1,5 +1,5 @@
 import React from 'react';
-import { Brain,NotebookText, Play, FileText, Link, LayoutGrid, Star } from 'lucide-react';
+import { Brain, Play, FileText, Link, LayoutGrid, Star, File } from 'lucide-react';
 
 interface SidebarProps {
   activeItem?: string;
@@ -17,7 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick }) => {
     {
       id: 'note',
       label: 'Notes',
-      icon: NotebookText,
+      icon: FileText,
       count: undefined
     },
     {
@@ -29,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick }) => {
     {
       id: 'document',
       label: 'Documents',
-      icon: FileText,
+      icon: File,
       count: undefined
     },
     {
