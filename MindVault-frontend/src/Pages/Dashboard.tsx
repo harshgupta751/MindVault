@@ -162,7 +162,7 @@ try{
 const response= await axiosInstance.post(`/share/settings/${accessType==='public'}`);
 if(accessType==='public'){
     setShareData({
-      link: `${import.meta.env.CLIENT_URL}${response.data.sharableId}`,
+      link: `${import.meta.env.VITE_CLIENT_URL}${response.data.sharableId}`,
       isCopied: false
     });
   }else{
