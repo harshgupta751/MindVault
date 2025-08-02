@@ -308,4 +308,3 @@ const renderDocumentLink = () => {
 };
 
 export default NoteCard;
-

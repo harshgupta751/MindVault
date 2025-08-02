@@ -1,5 +1,5 @@
 import React from 'react';
-import { Share, Plus, Search, LogOut } from 'lucide-react';
+import { Share, Plus, Search, LogOut, Menu } from 'lucide-react';
 import Button from './Button';
 import { useRecoilState } from 'recoil';
 import { inputAtom } from '../store/atoms';
@@ -11,6 +11,7 @@ interface HeaderProps {
   onShareBrain?: () => void;
   onAddContent?: () => void;
   onLogout?: () => void;
+  onToggleSidebar: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -18,7 +19,8 @@ const Header: React.FC<HeaderProps> = ({
   subtitle = "Your knowledge hub for notes, links, videos & documents",
   onShareBrain,
   onAddContent,
-  onLogout
+  onLogout,
+  onToggleSidebar
 }) => {
 
 const [searchQuery, setSearchQuery] = useRecoilState(inputAtom)
@@ -33,6 +35,13 @@ const [searchQuery, setSearchQuery] = useRecoilState(inputAtom)
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
       
         <div className="flex-shrink-0">
+          <button
+  className="lg:hidden p-2 rounded hover:bg-gray-100"
+  onClick={onToggleSidebar}
+>
+  <Menu className="w-6 h-6 text-gray-700" />
+</button>
+
           <h1 className="text-2xl font-bold text-gray-900 mb-1">{title}</h1>
           <p className="text-gray-600">{subtitle}</p>
         </div>
