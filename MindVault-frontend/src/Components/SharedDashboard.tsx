@@ -16,6 +16,8 @@ const [headerHeight, setHeaderHeight] = useState(0);
 const [searchParams] = useSearchParams()
 const id= searchParams.get('id')
 const [isMounting, setIsMounting] = useState(true)
+const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
 
   useEffect(()=>{
     const timer= setTimeout(()=>{
@@ -104,21 +106,36 @@ return function(){
   return (
     <div className="min-h-screen bg-gray-50 flex">
     
-      <div className="fixed top-0 left-0 bottom-0 w-64">
-        <Sidebar 
-          activeItem={activeMenuItem}
-          onItemClick={handleMenuItemClick}
-        />
-      </div>
+    {/* Mobile Sidebar Overlay */}
+{isSidebarOpen && (
+  <div
+    className="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden"
+    onClick={() => setIsSidebarOpen(false)}
+  />
+)}
+
+{/* Sidebar Drawer */}
+<div className={`fixed top-0 left-0 bottom-0 w-64 bg-white z-50 transform transition-transform duration-300 ease-in-out
+  ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:relative lg:z-auto`}>
+  <Sidebar 
+    activeItem={activeMenuItem}
+    onItemClick={(item) => {
+      handleMenuItemClick(item);
+      setIsSidebarOpen(false); // auto-close on mobile
+    }}
+  />
+</div>
+
       
   
-      <div className="flex-1 flex flex-col ml-64">
+      <div className="flex-1 flex flex-col">
   
-        <div className="fixed top-0 right-0 left-64 z-30 bg-white shadow-sm" ref={headerRef}>
+        <div className="fixed top-0 right-0 lg:left-64 left-0 z-30 bg-white shadow-sm" ref={headerRef}>
           <SharedHeader 
           //@ts-ignore
           searchValue={searchValue}
           setSearchValue={setSearchValue}
+          onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
           />
         </div>
         

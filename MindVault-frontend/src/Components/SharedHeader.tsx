@@ -1,18 +1,20 @@
 import React from 'react';
-import { Search } from 'lucide-react';
+import { Menu, Search } from 'lucide-react';
 
 interface SharedHeaderProps {
   title?: string;
   subtitle?: string;
   searchValue: string,
-  setSearchValue: (value: string)=>void
+  setSearchValue: (value: string)=>void,
+  onToggleSidebar: () => void
 }
 
 const SharedHeader: React.FC<SharedHeaderProps> = ({ 
   title = "MindVault", 
   subtitle = "Shared knowledge hub for notes, links, videos & documents",
   searchValue,
-  setSearchValue
+  setSearchValue,
+  onToggleSidebar
 }) => {
 
 
@@ -22,6 +24,13 @@ const SharedHeader: React.FC<SharedHeaderProps> = ({
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
        
         <div className="flex-shrink-0">
+          <button
+  className="lg:hidden p-2 rounded hover:bg-gray-100"
+  onClick={onToggleSidebar}
+>
+  <Menu className="w-6 h-6 text-gray-700" />
+</button>
+
           <h1 className="text-2xl font-bold text-gray-900 mb-1">{title}</h1>
           <p className="text-gray-600">{subtitle}</p>
         </div>
