@@ -102,12 +102,11 @@ return function(){
     const response= await axiosInstance.get('/sharemode')
         if(response.data.shareOn===true){
           setAccessType('public')
-          setHasInitializedAccessType(true)
         }else if(response.data.shareOn===false){
           setAccessType('restricted')
-          setHasInitializedAccessType(true)
         }
-        handleShareBrain()
+        setHasInitializedAccessType(true)
+
     }catch(error: any){
     if(error.response?.status===403){
           toast.error("Error occured. Please refresh the page!")
@@ -160,7 +159,7 @@ if(hasInitializedAccessType){
   handleShareBrain()
 }
 
-  },[accessType])
+  },[accessType, hasInitializedAccessType])
 
   const handleDeleteNote = async (noteId: string) => {
     const toastId= toast.loading("Deleting...")
