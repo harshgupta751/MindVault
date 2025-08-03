@@ -140,7 +140,7 @@ await transporter.sendMail({
     from: 'MindVault <no-reply@mindvault.com>',
     to: email,
     subject: "Reset Password",
-    html: `<p>Click on <a href="${resetLink}">${resetLink}</a> to reset your password. Link expires in 15 minutes.</p>`
+    html: `<p>Click on <a href="${resetLink}">{resetLink}</a> to reset your password. Link expires in 15 minutes.</p>`
 })
 
 
