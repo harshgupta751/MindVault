@@ -7,7 +7,7 @@
 
 ## 🚀 Features
 
-- 🔐 **User Authentication** - Sign up, Sign in, Forgot Password feature using nodemailer
+- 🔐 **User Authentication** - Sign up, Sign in, Forgot Password(Resetting Password) feature using nodemailer
 - 📂 **Content Types** - Save Notes, Documents (with upload), Links, and Videos (with thumbnails)
 - 📌 **Mark as Important** - Star important content to quickly find it later
 - 🔍 **Search & Filter** - Real-time search and content filtering by type or on basis of Important tag

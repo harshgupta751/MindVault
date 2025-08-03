@@ -47,7 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick }) => {
   ];
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 h-screen flex flex-col">
+    <div className="w-64 bg-white border-r border-gray-200 h-screen flex flex-col overflow-hidden">
 
       <div className="p-9 border-b border-gray-200">
         <div className="flex items-center gap-3">
@@ -58,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick }) => {
         </div>
       </div>
 
-      <nav className="flex-1 p-4">
+      <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon;

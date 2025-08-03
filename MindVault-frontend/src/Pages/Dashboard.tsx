@@ -29,6 +29,7 @@ const [headerHeight, setHeaderHeight] = useState(0);
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 
+
   useEffect(()=>{
     const timer= setTimeout(()=>{
         setIsMounting(false)
@@ -233,7 +234,7 @@ if(accessType==='public'){
 
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+   <div className="h-screen overflow-hidden flex bg-gray-50"> 
     
 
 {isSidebarOpen && (

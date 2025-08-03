@@ -107,7 +107,7 @@ return function(){
 
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+   <div className="h-screen overflow-hidden flex bg-gray-50">
     
    
 {isSidebarOpen && (
