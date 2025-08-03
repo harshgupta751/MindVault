@@ -253,16 +253,15 @@ const renderDocumentLink = () => {
 
       <div className="px-4 pb-4 flex-grow flex flex-col justify-between">
 <div className="min-h-[24px] mb-2">
-  {ogData.description ? (
-    <h4 className="text-gray-600 text-[15px] italic font-medium leading-snug tracking-tight transition duration-200 hover:text-blue-600 hover:drop-shadow-md">
-      {ogData.description}
-    </h4>
-  ) : (
-    <div className="invisible text-[15px] italic font-medium leading-snug tracking-tight">
-      placeholder
-    </div>
-  )}
+  <h4 className={`text-[15px] italic font-medium leading-snug tracking-tight transition duration-200 ${
+    subtitle ? 'text-gray-600' : 'invisible'
+  }`}>
+    {subtitle || 'placeholder'}
+  </h4>
 </div>
+
+
+
 
 
 

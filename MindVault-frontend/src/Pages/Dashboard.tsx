@@ -100,10 +100,6 @@ return function(){
   async function temperoryFunction(){
     try{
     const response= await axiosInstance.get('/sharemode')
-        if(response.status===403){
-          toast.error("Error occured. Please refresh the page!")
-          return
-        }
         if(response.data.shareOn===true){
           setAccessType('public')
           setHasInitializedAccessType(true)
@@ -112,7 +108,11 @@ return function(){
           setHasInitializedAccessType(true)
         }
         handleShareBrain()
-    }catch(e){
+    }catch(error: any){
+    if(error.response?.status===403){
+          toast.error("Error occured. Please refresh the page!")
+          return
+        }
       toast.error("Error occured. Please refresh the page!")
     }
 

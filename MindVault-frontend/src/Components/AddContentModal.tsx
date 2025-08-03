@@ -49,6 +49,7 @@ setType("");
 tagRef.current.value="";
 setSubtitle("");
 toast.success("Added successfully!", {id: toastId})
+onClose()
 }
 catch(e){
 toast.error("Error in adding occured. Please try again!", {id: toastId})
@@ -240,11 +241,7 @@ toast.error("Error in adding occured. Please try again!", {id: toastId})
           }}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={async ()=>{
-          await handleContentSubmission()
-            onClose()
-
-          }}>
+          <Button variant="primary" onClick={handleContentSubmission}>
             Add Content
           </Button>
         </div>
