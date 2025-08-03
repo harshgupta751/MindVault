@@ -109,7 +109,7 @@ return function(){
   return (
     <div className="min-h-screen bg-gray-50 flex">
     
-    {/* Mobile Sidebar Overlay */}
+   
 {isSidebarOpen && (
   <div
     className="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden"
@@ -117,14 +117,14 @@ return function(){
   />
 )}
 
-{/* Sidebar Drawer */}
+
 <div className={`fixed top-0 left-0 bottom-0 w-64 bg-white z-50 transform transition-transform duration-300 ease-in-out
   ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:relative lg:z-auto`}>
   <Sidebar 
     activeItem={activeMenuItem}
     onItemClick={(item) => {
       handleMenuItemClick(item);
-      setIsSidebarOpen(false); // auto-close on mobile
+      setIsSidebarOpen(false); 
     }}
   />
 </div>

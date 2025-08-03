@@ -73,14 +73,15 @@ const [type, setType] = useRecoilState(typeAtom)
  let filteredContent= notes
 
 if(debouncedValue){
+ //@ts-ignore
 filteredContent=filteredContent.filter((ele)=>ele.title.toLowerCase().includes(debouncedValue.toLowerCase()) || ele.subtitle?.toLowerCase()?.includes(debouncedValue.toLowerCase()))
 }
 if(activeMenuItem!='all' && activeMenuItem!='important'){
-
+//@ts-ignore
 filteredContent=filteredContent.filter((ele)=> ele.type===activeMenuItem)
 }
 if(activeMenuItem=='important'){
-
+//@ts-ignore
 filteredContent= filteredContent.filter((ele)=> ele.isImportant)
 }
 //@ts-ignore
@@ -235,7 +236,7 @@ if(accessType==='public'){
   return (
     <div className="min-h-screen bg-gray-50 flex">
     
- {/* Mobile Sidebar Overlay */}
+
 {isSidebarOpen && (
   <div
     className="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden"
@@ -243,14 +244,14 @@ if(accessType==='public'){
   />
 )}
 
-{/* Sidebar Drawer */}
+
 <div className={`fixed top-0 left-0 bottom-0 w-64 bg-white z-50 transform transition-transform duration-300 ease-in-out
   ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:relative lg:z-auto`}>
   <Sidebar 
     activeItem={activeMenuItem}
     onItemClick={(item) => {
       handleMenuItemClick(item);
-      setIsSidebarOpen(false); // auto-close on mobile
+      setIsSidebarOpen(false); 
     }}
   />
 </div>
