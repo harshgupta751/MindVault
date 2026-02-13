@@ -145,7 +145,7 @@ app.post('/resetpassword', function (req, res) {
                 from: 'MindVault <no-reply@mindvault.com>',
                 to: email,
                 subject: "Reset Password",
-                html: `<p>Click <a href="${resetLink}">here</a> to reset your password. Link expires in 15 minutes.</p>`
+                html: `<p>Click on <a href="${resetLink}">${resetLink}</a> to reset your password. Link expires in 15 minutes.</p>`
             });
             res.json({
                 message: "Reset link sent to your email"
