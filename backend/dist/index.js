@@ -35,6 +35,13 @@ app.use((0, cors_1.default)({
     credentials: true
 }));
 app.use(express_1.default.json());
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: "ok",
+        uptime: process.uptime(),
+        timestamp: new Date(),
+    });
+});
 app.post('/signup', function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = validators_1.signUpSchema.safeParse(req.body);
